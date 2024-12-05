@@ -1,6 +1,6 @@
 //
 //  PokemonListViewModel.swift
-//  PokeApiProject
+//  AdidasPokedex
 //
 //  Created by Esteban, Alejandro1 on 2/12/24.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor
+@MainActor // Added so it runs on the main thread
 final class PokemonListViewModel: ObservableObject {
     @Published private(set) var pokemons: [Pokemon] = []
     @Published private(set) var filteredPokemons: [Pokemon] = []

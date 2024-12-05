@@ -21,7 +21,7 @@ enum PokemonGeneration: Int, CaseIterable {
     
     var range: ClosedRange<Int> {
         switch self {
-        case .all: return 1...1008
+        case .all: return 1...1025
         case .gen1: return 1...151
         case .gen2: return 152...251
         case .gen3: return 252...386

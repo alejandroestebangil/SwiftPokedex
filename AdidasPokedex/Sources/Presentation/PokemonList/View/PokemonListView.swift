@@ -1,80 +1,96 @@
 //
 //  PokemonListView.swift
-//  PokeApiProject
+//  AdidasPokedex
 //
 //  Created by Esteban, Alejandro1 on 2/12/24.
 //
 
-
 import SwiftUI
+
+struct NavigationBarModifier: ViewModifier {
+    var height: CGFloat
+    
+    func body(content: Content) -> some View {
+        content
+            .onAppear {
+                let appearance = UINavigationBar.appearance()
+                appearance.frame.size.height = height
+                appearance.setNeedsLayout()
+            }
+    }
+}
 
 struct PokemonListView: View {
     @StateObject var viewModel: PokemonListViewModel
-    private let pokemonRepository: PokemonRepository
     
-    init(viewModel: PokemonListViewModel, pokemonRepository: PokemonRepository) {
+    init(viewModel: PokemonListViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
-        self.pokemonRepository = pokemonRepository
         
-        // Title bar
+        // Custom navigation bar appearance
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
-        appearance.largeTitleTextAttributes = [
-            .font: UIFont.systemFont(ofSize: 36, weight: .bold)
-        ]
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        appearance.backgroundColor = .systemBackground
+        
+        // Make the navigation bar taller
+        let navbar = UINavigationBar.appearance()
+        navbar.standardAppearance = appearance
+        navbar.compactAppearance = appearance
+        navbar.scrollEdgeAppearance = appearance
+        
+        // Remove default back button text
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(
+            UIOffset(horizontal: -1000, vertical: 0),
+            for: .default
+        )
     }
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                filterBar
-                
-                Group {
-                    if viewModel.isLoading {
-                        LoadingView()
-                    } else {
-                        pokemonList
-                            .navigationBarTitleDisplayMode(.inline)
-                    }
-                }
-                .toolbar {
-                    ToolbarItem(placement: .principal) {
-                        HStack(spacing: 12) {
-                            Image("pokedex-logo")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(height: 80)
-                                .padding(.bottom, 15)
-                                .padding(.top, 10)
-                            
-                            Image("pokeball-logo")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 70, height: 70)
-                                .padding(.vertical, 10)
+            NavigationView {
+                VStack(spacing: 0) {
+                    // Custom navigation header
+                    Rectangle()
+                        .fill(Color(.systemBlue))
+                        .frame(height: 90)
+                        .overlay(
+                            HStack(spacing: 12) {
+                                Image("pokedex-logo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 80)
+                                
+                                Image("pokeball-logo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 70, height: 70)
+                            }
+                        )
+                        .shadow(radius: 3)
+                    
+                    filterBar
+                    
+                    Group {
+                        if viewModel.isLoading {
+                            LoadingView()
+                        } else {
+                            pokemonList
                         }
-                        .padding(.vertical, 42)
-                        .frame(maxWidth: .infinity)
+                    }
+                    .task {
+                        await viewModel.loadPokemonList()
+                    }
+                    .alert("Error", isPresented: .constant(viewModel.error != nil)) {
+                        Button("OK", role: .cancel) {}
+                    } message: {
+                        Text(viewModel.error?.localizedDescription ?? "Unknown error")
                     }
                 }
-                .task {
-                    await viewModel.loadPokemonList()
-                }
-                .alert("Error", isPresented: .constant(viewModel.error != nil)) {
-                    Button("OK", role: .cancel) {}
-                } message: {
-                    Text(viewModel.error?.localizedDescription ?? "Unknown error")
-                }
+                .navigationBarHidden(true) // FIXEAR ESTO Hide the default navigation bar
             }
         }
-    }
     
     private var filterBar: some View {
         HStack(spacing: 16) {
-            // Generation Picker
+            // Generation Choose
             Menu {
                 ForEach(PokemonGeneration.allCases, id: \.self) { generation in
                     Button(action: {
@@ -126,7 +142,7 @@ struct PokemonListView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
-        .background(Color(.systemBackground))
+        .background(Color(.systemGray6))
         .shadow(radius: 1)
     }
     
@@ -138,7 +154,7 @@ struct PokemonListView: View {
                 } label: {
                     EmptyView()
                 }
-                .opacity(0)
+                .opacity(0) //FIXEAR HACIENDOLO DE OTRA FORMA
                 
                 PokemonRowView(pokemon: pokemon)
             }
@@ -159,7 +175,7 @@ struct LoadingView: View {
 }
 
 struct PokemonRowView: View {
-    let pokemon: Pokemon
+    let pokemon: Pokemon // FIXEAR CON DTO POR EJ
     @State private var isFavorite = false
     
     var body: some View {

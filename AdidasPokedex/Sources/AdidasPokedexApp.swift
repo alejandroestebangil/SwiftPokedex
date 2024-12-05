@@ -17,7 +17,7 @@ struct AdidasPokedexApp: App {
         // Initialize filter use case
         filterUseCase = DefaultFilterPokemonUseCase()
         
-        // Initialize view model with both use cases
+        // Initialize view model with the use cases
         pokemonListViewModel = PokemonListViewModel(
             fetchPokemonListUseCase: DefaultFetchPokemonListUseCase(
                 repository: repository
@@ -29,8 +29,7 @@ struct AdidasPokedexApp: App {
     var body: some Scene {
         WindowGroup {
             PokemonListView(
-                viewModel: pokemonListViewModel,
-                pokemonRepository: repository
+                viewModel: pokemonListViewModel
             )
         }
     }

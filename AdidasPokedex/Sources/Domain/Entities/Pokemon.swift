@@ -1,6 +1,6 @@
 //
 //  Pokemon.swift
-//  PokeApiProject
+//  AdidasPokedex
 //
 //  Created by Esteban, Alejandro1 on 2/12/24.
 //
