@@ -40,13 +40,15 @@ struct PokemonListView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     HStack(spacing: 16) {
-                        Text("Pokédex")
-                            .font(.system(size: 46, weight: .bold))
+                        Image("pokedex-logo")
+                            .frame(height: 50)
+                            .padding(.bottom, 10)
                         
                         Image("pokeball-logo")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 53, height: 53)
+                            .frame(width: 50, height: 50)
+                            .padding(.bottom, 5)
                     }
                     .padding(.vertical, 12)
                     .frame(maxWidth: .infinity)
