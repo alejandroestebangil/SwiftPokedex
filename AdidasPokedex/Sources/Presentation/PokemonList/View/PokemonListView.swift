@@ -7,47 +7,16 @@
 
 import SwiftUI
 
-struct NavigationBarModifier: ViewModifier {
-    var height: CGFloat
-    
-    func body(content: Content) -> some View {
-        content
-            .onAppear {
-                let appearance = UINavigationBar.appearance()
-                appearance.frame.size.height = height
-                appearance.setNeedsLayout()
-            }
-    }
-}
-
 struct PokemonListView: View {
     @StateObject var viewModel: PokemonListViewModel
     
     init(viewModel: PokemonListViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
-        
-        // Custom navigation bar appearance
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithDefaultBackground()
-        appearance.backgroundColor = .systemBackground
-        
-        // Make the navigation bar taller
-        let navbar = UINavigationBar.appearance()
-        navbar.standardAppearance = appearance
-        navbar.compactAppearance = appearance
-        navbar.scrollEdgeAppearance = appearance
-        
-        // Remove default back button text
-        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(
-            UIOffset(horizontal: -1000, vertical: 0),
-            for: .default
-        )
     }
     
     var body: some View {
             NavigationView {
                 VStack(spacing: 0) {
-                    // Custom navigation header
                     Rectangle()
                         .fill(Color(.systemBlue))
                         .frame(height: 90)
@@ -73,6 +42,7 @@ struct PokemonListView: View {
                             LoadingView()
                         } else {
                             pokemonList
+                                .navigationBarTitleDisplayMode(.inline)
                         }
                     }
                     .task {
@@ -84,7 +54,6 @@ struct PokemonListView: View {
                         Text(viewModel.error?.localizedDescription ?? "Unknown error")
                     }
                 }
-                .navigationBarHidden(true) // FIXEAR ESTO Hide the default navigation bar
             }
         }
     
