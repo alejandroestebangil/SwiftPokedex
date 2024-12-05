@@ -29,49 +29,113 @@ struct PokemonListView: View {
     
     var body: some View {
         NavigationView {
-            Group {
-                if viewModel.isLoading {
-                    LoadingView()
-                } else {
-                    pokemonList
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    HStack(spacing: 16) {
-                        Image("pokedex-logo")
-                            .frame(height: 50)
-                            .padding(.bottom, 10)
-                        
-                        Image("pokeball-logo")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 50, height: 50)
-                            .padding(.bottom, 5)
+            VStack(spacing: 0) {
+                filterBar
+                
+                Group {
+                    if viewModel.isLoading {
+                        LoadingView()
+                    } else {
+                        pokemonList
+                            .navigationBarTitleDisplayMode(.inline)
                     }
-                    .padding(.vertical, 12)
-                    .frame(maxWidth: .infinity)
                 }
-            }
-            .task {
-                await viewModel.loadPokemonList()
-            }
-            .alert("Error", isPresented: .constant(viewModel.error != nil)) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(viewModel.error?.localizedDescription ?? "Unknown error")
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        HStack(spacing: 12) {
+                            Image("pokedex-logo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 80)
+                                .padding(.bottom, 15)
+                                .padding(.top, 10)
+                            
+                            Image("pokeball-logo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 70, height: 70)
+                                .padding(.vertical, 10)
+                        }
+                        .padding(.vertical, 42)
+                        .frame(maxWidth: .infinity)
+                    }
+                }
+                .task {
+                    await viewModel.loadPokemonList()
+                }
+                .alert("Error", isPresented: .constant(viewModel.error != nil)) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text(viewModel.error?.localizedDescription ?? "Unknown error")
+                }
             }
         }
     }
     
+    private var filterBar: some View {
+        HStack(spacing: 16) {
+            // Generation Picker
+            Menu {
+                ForEach(PokemonGeneration.allCases, id: \.self) { generation in
+                    Button(action: {
+                        viewModel.updateGeneration(generation)
+                    }) {
+                        if generation == viewModel.selectedGeneration {
+                            Label(generation.displayName, systemImage: "checkmark")
+                        } else {
+                            Text(generation.displayName)
+                        }
+                    }
+                }
+            } label: {
+                Label(viewModel.selectedGeneration.displayName, systemImage: "line.3.horizontal.decrease.circle")
+                    .foregroundColor(.primary)
+            }
+            
+            Spacer()
+            
+            // Sort Type Menu
+            Menu {
+                Button(action: { viewModel.updateSortType(.id) }) {
+                    if viewModel.selectedSortType == .id {
+                        Label("Number", systemImage: "checkmark")
+                    } else {
+                        Text("Number")
+                    }
+                }
+                
+                Button(action: { viewModel.updateSortType(.name) }) {
+                    if viewModel.selectedSortType == .name {
+                        Label("Name", systemImage: "checkmark")
+                    } else {
+                        Text("Name")
+                    }
+                }
+            } label: {
+                Label(viewModel.selectedSortType.displayName, systemImage: "slider.horizontal.3")
+                    .foregroundColor(.primary)
+            }
+            
+            // Sort Order Button
+            Button(action: {
+                viewModel.toggleSortOrder()
+            }) {
+                Image(systemName: viewModel.selectedSortOrder.systemImage)
+                    .foregroundColor(.primary)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .background(Color(.systemBackground))
+        .shadow(radius: 1)
+    }
+    
     private var pokemonList: some View {
-        List(viewModel.pokemons) { pokemon in
+        List(viewModel.filteredPokemons) { pokemon in
             ZStack {
                 NavigationLink {
                     Text("Pokemon Detail: \(pokemon.name)")
                 } label: {
-                    // Empty label to hide the navigation arrow
                     EmptyView()
                 }
                 .opacity(0)
@@ -99,7 +163,7 @@ struct PokemonRowView: View {
     @State private var isFavorite = false
     
     var body: some View {
-        HStack(spacing: 16){
+        HStack(spacing: 16) {
             HStack {
                 AsyncImage(url: URL(string: pokemon.imageUrl)) { image in
                     image

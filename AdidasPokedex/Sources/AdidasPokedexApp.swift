@@ -5,6 +5,7 @@ struct AdidasPokedexApp: App {
     // Create all dependencies at the app level
     private let networkService = DefaultNetworkService()
     private let repository: PokemonRepository
+    private let filterUseCase: FilterPokemonUseCase
     private let pokemonListViewModel: PokemonListViewModel
     
     init() {
@@ -13,11 +14,15 @@ struct AdidasPokedexApp: App {
             networkService: networkService
         )
         
-        // Initialize view model
+        // Initialize filter use case
+        filterUseCase = DefaultFilterPokemonUseCase()
+        
+        // Initialize view model with both use cases
         pokemonListViewModel = PokemonListViewModel(
             fetchPokemonListUseCase: DefaultFetchPokemonListUseCase(
                 repository: repository
-            )
+            ),
+            filterPokemonUseCase: filterUseCase
         )
     }
     

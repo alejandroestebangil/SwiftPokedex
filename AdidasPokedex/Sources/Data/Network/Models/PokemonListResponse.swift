@@ -18,4 +18,9 @@ struct PokemonListResponse: Codable {
 struct PokemonListItem: Codable {
     let name: String
     let url: String
+    
+    var id: Int {
+        guard let idString = url.split(separator: "/").last else { return 0 }
+        return Int(idString) ?? 0
+    }
 }
