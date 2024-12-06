@@ -36,9 +36,9 @@ enum PokemonGeneration: Int, CaseIterable {
     
     var displayName: String {
         if self == .all {
-            return "All Generations"
+            return "All Gens"
         }
-        return "Generation \(rawValue)"
+        return "Gen \(rawValue)"
     }
 }
 

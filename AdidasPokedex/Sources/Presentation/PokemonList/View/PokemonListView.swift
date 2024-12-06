@@ -15,8 +15,10 @@ struct PokemonListView: View {
     }
     
     var body: some View {
-            NavigationView {
+        NavigationView {
+            ScrollViewReader { proxy in
                 VStack(spacing: 0) {
+                    // Custom header with tap gesture
                     Rectangle()
                         .fill(Color(.systemBlue))
                         .frame(height: 90)
@@ -34,6 +36,11 @@ struct PokemonListView: View {
                             }
                         )
                         .shadow(radius: 3)
+                        .onTapGesture {
+                            withAnimation {
+                                proxy.scrollTo("top", anchor: .top)
+                            }
+                        }
                     
                     filterBar
                     
@@ -56,6 +63,7 @@ struct PokemonListView: View {
                 }
             }
         }
+    }
     
     private var filterBar: some View {
         HStack(spacing: 16) {
@@ -116,13 +124,16 @@ struct PokemonListView: View {
     }
     
     private var pokemonList: some View {
-        List(viewModel.filteredPokemons) { pokemon in
-            NavigationLink {
-                Text("Pokemon Detail: \(pokemon.name)")
-            } label: {
-                PokemonRowView(pokemon: pokemon)
+        List {
+            ForEach(viewModel.filteredPokemons) { pokemon in
+                NavigationLink {
+                    Text("Pokemon Detail: \(pokemon.name)")
+                } label: {
+                    PokemonRowView(pokemon: pokemon)
+                }
+                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                .id(viewModel.filteredPokemons.first?.id == pokemon.id ? "top" : nil) // Use first item in filtered list
             }
-            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         }
         .listStyle(PlainListStyle())
     }
