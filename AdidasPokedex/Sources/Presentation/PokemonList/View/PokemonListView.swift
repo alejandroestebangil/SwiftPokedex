@@ -18,37 +18,19 @@ struct PokemonListView: View {
         NavigationView {
             ScrollViewReader { proxy in
                 VStack(spacing: 0) {
-                    // Custom header with tap gesture
-                    Rectangle()
-                        .fill(Color(.systemBlue))
-                        .frame(height: 90)
-                        .overlay(
-                            HStack(spacing: 12) {
-                                Image("pokedex-logo")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 80)
-                                
-                                Image("pokeball-logo")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 70, height: 70)
-                            }
-                        )
-                        .shadow(radius: 3)
-                        .onTapGesture {
-                            withAnimation {
-                                proxy.scrollTo("top", anchor: .top)
-                            }
+                    PokemonHeader {
+                        withAnimation {
+                            proxy.scrollTo("top", anchor: .top)
                         }
+                    }
                     
-                    filterBar
+                    FilterBar(viewModel: viewModel)
                     
                     Group {
                         if viewModel.isLoading {
                             LoadingView()
                         } else {
-                            pokemonList
+                            pokemonList(proxy: proxy)
                                 .navigationBarTitleDisplayMode(.inline)
                         }
                     }
@@ -65,65 +47,7 @@ struct PokemonListView: View {
         }
     }
     
-    private var filterBar: some View {
-        HStack(spacing: 16) {
-            // Generation Choose
-            Menu {
-                ForEach(PokemonGeneration.allCases, id: \.self) { generation in
-                    Button(action: {
-                        viewModel.updateGeneration(generation)
-                    }) {
-                        if generation == viewModel.selectedGeneration {
-                            Label(generation.displayName, systemImage: "checkmark")
-                        } else {
-                            Text(generation.displayName)
-                        }
-                    }
-                }
-            } label: {
-                Label(viewModel.selectedGeneration.displayName, systemImage: "line.3.horizontal.decrease.circle")
-                    .foregroundColor(.primary)
-            }
-            
-            Spacer()
-            
-            // Sort Type Menu
-            Menu {
-                Button(action: { viewModel.updateSortType(.id) }) {
-                    if viewModel.selectedSortType == .id {
-                        Label("Number", systemImage: "checkmark")
-                    } else {
-                        Text("Number")
-                    }
-                }
-                
-                Button(action: { viewModel.updateSortType(.name) }) {
-                    if viewModel.selectedSortType == .name {
-                        Label("Name", systemImage: "checkmark")
-                    } else {
-                        Text("Name")
-                    }
-                }
-            } label: {
-                Label(viewModel.selectedSortType.displayName, systemImage: "slider.horizontal.3")
-                    .foregroundColor(.primary)
-            }
-            
-            // Sort Order Button
-            Button(action: {
-                viewModel.toggleSortOrder()
-            }) {
-                Image(systemName: viewModel.selectedSortOrder.systemImage)
-                    .foregroundColor(.primary)
-            }
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 8)
-        .background(Color(.systemGray6))
-        .shadow(radius: 1)
-    }
-    
-    private var pokemonList: some View {
+    private func pokemonList(proxy: ScrollViewProxy) -> some View {
         List {
             ForEach(viewModel.filteredPokemons) { pokemon in
                 NavigationLink {
@@ -132,7 +56,7 @@ struct PokemonListView: View {
                     PokemonRowView(pokemon: pokemon)
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-                .id(viewModel.filteredPokemons.first?.id == pokemon.id ? "top" : nil) // Use first item in filtered list
+                .id(viewModel.filteredPokemons.first?.id == pokemon.id ? "top" : nil) // First pokemon of the list
             }
         }
         .listStyle(PlainListStyle())
@@ -150,7 +74,7 @@ struct LoadingView: View {
 }
 
 struct PokemonRowView: View {
-    let pokemon: Pokemon // FIXEAR CON DTO POR EJ
+    let pokemon: Pokemon // FIX WITH DTO
     @State private var isFavorite = false
     
     var body: some View {
