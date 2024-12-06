@@ -117,14 +117,9 @@ struct PokemonListView: View {
     
     private var pokemonList: some View {
         List(viewModel.filteredPokemons) { pokemon in
-            ZStack {
-                NavigationLink {
-                    Text("Pokemon Detail: \(pokemon.name)")
-                } label: {
-                    EmptyView()
-                }
-                .opacity(0) //FIXEAR HACIENDOLO DE OTRA FORMA
-                
+            NavigationLink {
+                Text("Pokemon Detail: \(pokemon.name)")
+            } label: {
                 PokemonRowView(pokemon: pokemon)
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
