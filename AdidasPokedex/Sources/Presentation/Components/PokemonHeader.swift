@@ -14,21 +14,29 @@ struct PokemonHeader: View {
     var body: some View {
         Rectangle()
             .fill(Color(.systemBlue))
-            .frame(height: 90)
+            .frame(height: Constants.height)
             .overlay(
-                HStack(spacing: 12) {
+                HStack(spacing: Constants.imageSpacing) {
                     Image("pokedex-logo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(height: 80)
+                        .frame(height: Constants.pokedexHeight)
                     
                     Image("pokeball-logo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 70, height: 70)
+                        .frame(width: Constants.pokeballSize, height: Constants.pokeballSize)
                 }
             )
             .shadow(radius: 3)
             .onTapGesture(perform: onTap)
+    }
+    
+    
+    private struct Constants {
+        static let height: CGFloat = 90
+        static let imageSpacing: CGFloat = 12
+        static let pokedexHeight: CGFloat = 80
+        static let pokeballSize: CGFloat = 70
     }
 }

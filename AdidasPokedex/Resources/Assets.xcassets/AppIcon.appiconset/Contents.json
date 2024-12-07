@@ -77,16 +77,19 @@
       "size" : "40x40"
     },
     {
+      "filename" : "Pokeball (8).png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
+      "filename" : "Pokeball.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
+      "filename" : "Pokeball (2) 1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"

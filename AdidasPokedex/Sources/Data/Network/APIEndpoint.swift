@@ -9,7 +9,8 @@
 import Foundation
 
 enum APIEndpoint {
-    case pokemonList(limit: Int = 1025)
+    static let totalPokemons: Int = 1025
+    case pokemonList(limit: Int = totalPokemons)
     case pokemonDetail(id: Int)
     
     var url: URL? {
