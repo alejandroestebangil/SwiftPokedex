@@ -21,6 +21,7 @@ struct PokemonListView: View {
                     PokemonHeader {
                         withAnimation {
                             proxy.scrollTo("top", anchor: .top)
+                            // Return to top clicking header
                         }
                     }
                     

@@ -17,6 +17,7 @@ enum APIEndpoint {
         switch self {
         case .pokemonList(let limit):
             return URL(string: "https://pokeapi.co/api/v2/pokemon?limit=\(limit)")
+        
         // Case added pending the implementation of de PokemonDetailsPage
         case .pokemonDetail(let id):
             return URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)")
