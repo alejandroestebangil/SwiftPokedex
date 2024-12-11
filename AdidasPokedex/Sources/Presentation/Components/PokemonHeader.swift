@@ -14,6 +14,7 @@ struct PokemonHeader: View {
     var body: some View {
         Rectangle()
             .fill(Color(.systemBlue))
+            .edgesIgnoringSafeArea(.horizontal)
             .frame(height: Constants.height)
             .overlay(
                 HStack(spacing: Constants.imageSpacing) {
