@@ -15,19 +15,14 @@ final class DefaultPokemonRepository: PokemonRepository {
         self.networkService = networkService
     }
     
+    // Fetch and decode to DTO then convert to domain model
     func fetchPokemonList() async throws -> [Pokemon] {
-        let response: PokemonListResponse = try await networkService.fetch(from: .pokemonList())
-        return response.results.map { item in
-            Pokemon(
-                id: item.id,
-                name: item.name,
-                imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(item.id).png"
-            )
-        }
+        let response: PokemonListResponseDTO = try await networkService.fetch(from: .pokemonList())
+        return response.toDomain()
     }
     
-    // Added pending the implementation of de PokemonDetailsPage
-    func fetchPokemon(id: Int) async throws -> Pokemon {
-        return try await networkService.fetch(from: .pokemonDetail(id: id))
+    func fetchPokemonDetail(id: Int) async throws -> PokemonDetail {
+        let dto: PokemonDetailDTO = try await networkService.fetch(from: .pokemonDetail(id: id))
+        return dto.toDomain()
     }
 }

@@ -40,7 +40,7 @@ final class PokemonListViewModel: ObservableObject {
         
         isLoading = false
     }
-    
+
     func applyFilters() {
         filteredPokemons = filterPokemonUseCase.execute(
             pokemons: pokemons,

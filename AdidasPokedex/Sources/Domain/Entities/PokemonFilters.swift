@@ -8,16 +8,7 @@
 import Foundation
 
 enum PokemonGeneration: Int, CaseIterable {
-    case all = 0
-    case gen1 = 1
-    case gen2 = 2
-    case gen3 = 3
-    case gen4 = 4
-    case gen5 = 5
-    case gen6 = 6
-    case gen7 = 7
-    case gen8 = 8
-    case gen9 = 9
+    case all, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9
     
     var range: ClosedRange<Int> {
         switch self {
@@ -46,22 +37,22 @@ enum SortType {
     case name
     case id
     
-    var displayName: String {
+    /*var displayName: String {
         switch self {
-        case .name: return "Name"
-        case .id: return "Number"
+        case .name: return "Name" //posible moverlo a la  view e inlcuso las flechas
+        case .id: return "Number" //no responsabilidad dominio
         }
-    }
+    }*/
 }
 
 enum SortOrder {
     case ascending
     case descending
     
-    var systemImage: String {
+    /*var systemImage: String {
         switch self {
         case .ascending: return "arrow.up"
         case .descending: return "arrow.down"
         }
-    }
+    }*/
 }

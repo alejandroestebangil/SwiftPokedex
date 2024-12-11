@@ -38,15 +38,15 @@ private struct GenerationMenu: View {
                     viewModel.updateGeneration(generation)
                 }) {
                     if generation == viewModel.selectedGeneration {
-                        Label(generation.displayName, systemImage: "checkmark")
+                        Label(FilterBar.getGenerationDisplayName(generation), systemImage: "checkmark")
                     } else {
-                        Text(generation.displayName)
+                        Text(FilterBar.getGenerationDisplayName(generation))
                     }
                 }
                 .frame(width: 60)
             }
         } label: {
-            Label(viewModel.selectedGeneration.displayName, systemImage: "line.3.horizontal.decrease.circle")
+            Label(FilterBar.getGenerationDisplayName(viewModel.selectedGeneration), systemImage: "line.3.horizontal.decrease.circle")
                 .foregroundColor(.primary)
         }
     }
@@ -60,21 +60,21 @@ private struct SortTypeMenu: View {
         Menu {
             Button(action: { viewModel.updateSortType(.id) }) {
                 if viewModel.selectedSortType == .id {
-                    Label("Number", systemImage: "checkmark")
+                    Label(FilterBar.getSortTypeDisplayName(.id), systemImage: "checkmark")
                 } else {
-                    Text("Number")
+                    Text(FilterBar.getSortTypeDisplayName(.id))
                 }
             }
             
             Button(action: { viewModel.updateSortType(.name) }) {
                 if viewModel.selectedSortType == .name {
-                    Label("Name", systemImage: "checkmark")
+                    Label(FilterBar.getSortTypeDisplayName(.name), systemImage: "checkmark")
                 } else {
-                    Text("Name")
+                    Text(FilterBar.getSortTypeDisplayName(.name))
                 }
             }
         } label: {
-            Label(viewModel.selectedSortType.displayName, systemImage: "slider.horizontal.3")
+            Label(FilterBar.getSortTypeDisplayName(viewModel.selectedSortType), systemImage: "slider.horizontal.3")
                 .foregroundColor(.primary)
         }
     }
@@ -88,8 +88,32 @@ private struct SortOrderButton: View {
         Button(action: {
             viewModel.toggleSortOrder()
         }) {
-            Image(systemName: viewModel.selectedSortOrder.systemImage)
+            Image(systemName: FilterBar.getSortOrderSystemImage(viewModel.selectedSortOrder))
                 .foregroundColor(.primary)
+        }
+    }
+}
+
+extension FilterBar {
+    static func getGenerationDisplayName(_ generation: PokemonGeneration) -> String {
+        generation == .all ? "All Gens" : "Gen \(generation.rawValue)"
+    }
+    
+    static func getSortTypeDisplayName(_ sortType: SortType) -> String {
+        switch sortType {
+        case .name:
+            return "Name"
+        case .id:
+            return "Number"
+        }
+    }
+    
+    static func getSortOrderSystemImage(_ sortOrder: SortOrder) -> String {
+        switch sortOrder {
+        case .ascending:
+            return "arrow.up"
+        case .descending:
+            return "arrow.down"
         }
     }
 }
