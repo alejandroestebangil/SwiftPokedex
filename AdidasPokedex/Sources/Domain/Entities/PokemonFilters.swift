@@ -24,35 +24,14 @@ enum PokemonGeneration: Int, CaseIterable {
         case .gen9: return 906...1025
         }
     }
-    
-    var displayName: String {
-        if self == .all {
-            return "All Gens"
-        }
-        return "Gen \(rawValue)"
-    }
 }
 
 enum SortType {
     case name
     case id
-    
-    /*var displayName: String {
-        switch self {
-        case .name: return "Name" //posible moverlo a la  view e inlcuso las flechas
-        case .id: return "Number" //no responsabilidad dominio
-        }
-    }*/
 }
 
 enum SortOrder {
     case ascending
     case descending
-    
-    /*var systemImage: String {
-        switch self {
-        case .ascending: return "arrow.up"
-        case .descending: return "arrow.down"
-        }
-    }*/
 }

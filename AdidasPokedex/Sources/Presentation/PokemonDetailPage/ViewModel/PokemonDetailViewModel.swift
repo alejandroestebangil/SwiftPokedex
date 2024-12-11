@@ -10,7 +10,7 @@ import Foundation
 
 @MainActor
 final class PokemonDetailViewModel: ObservableObject {
-    @Published private(set) var pokemonDetail: PokemonDetail?
+    @Published private(set) var pokemonDetail: PokemonDetailViewDTO?
     @Published private(set) var isLoading = false
     @Published private(set) var error: Error?
     
@@ -27,7 +27,8 @@ final class PokemonDetailViewModel: ObservableObject {
         error = nil
         
         do {
-            pokemonDetail = try await fetchPokemonDetailUseCase.execute(id: pokemonId)
+            let detail = try await fetchPokemonDetailUseCase.execute(id: pokemonId)
+            pokemonDetail = PokemonDetailViewDTO(pokemon: detail)
         } catch {
             print("Error loading pokemon:", error.localizedDescription)
             self.error = error

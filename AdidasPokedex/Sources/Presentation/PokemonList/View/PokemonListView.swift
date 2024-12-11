@@ -79,8 +79,13 @@ struct LoadingView: View {
 }
 
 struct PokemonRowView: View {
-    let pokemon: Pokemon // FIX WITH DTO
-    @State private var isFavorite = false
+    let pokemon: PokemonListViewDTO
+    @State private var isFavorite: Bool
+    
+    init(pokemon: PokemonListViewDTO) {
+        self.pokemon = pokemon
+        self._isFavorite = State(initialValue: pokemon.isFavorite)
+    }
     
     var body: some View {
         HStack(spacing: 16) {
