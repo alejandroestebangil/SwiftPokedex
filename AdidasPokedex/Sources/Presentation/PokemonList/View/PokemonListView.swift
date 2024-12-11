@@ -9,9 +9,11 @@ import SwiftUI
 
 struct PokemonListView: View {
     @StateObject var viewModel: PokemonListViewModel
+    private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
     
-    init(viewModel: PokemonListViewModel) {
+    init(viewModel: PokemonListViewModel, fetchPokemonDetailUseCase: FetchPokemonDetailUseCase) {
         _viewModel = StateObject(wrappedValue: viewModel)
+        self.fetchPokemonDetailUseCase = fetchPokemonDetailUseCase
     }
     
     var body: some View {
@@ -31,7 +33,7 @@ struct PokemonListView: View {
                         if viewModel.isLoading {
                             LoadingView()
                         } else {
-                            pokemonList(proxy: proxy)
+                            pokemonList()
                                 .navigationBarTitleDisplayMode(.inline)
                         }
                     }
@@ -48,11 +50,14 @@ struct PokemonListView: View {
         }
     }
     
-    private func pokemonList(proxy: ScrollViewProxy) -> some View {
+    private func pokemonList() -> some View {
         List {
             ForEach(viewModel.filteredPokemons) { pokemon in
                 NavigationLink {
-                    Text("Pokemon Detail: \(pokemon.name)")
+                    PokemonDetailView(
+                        pokemonId: pokemon.id,
+                        fetchPokemonDetailUseCase: fetchPokemonDetailUseCase
+                    )
                 } label: {
                     PokemonRowView(pokemon: pokemon)
                 }
@@ -69,7 +74,6 @@ struct LoadingView: View {
         VStack {
             ProgressView()
             Text("Loading Pokémon...")
-                .foregroundColor(.secondary)
         }
     }
 }
@@ -89,8 +93,8 @@ struct PokemonRowView: View {
                     ProgressView()
                 }
                 .frame(width: 50, height: 50)
-                
-                Text(pokemon.id.description.capitalized + " -")
+
+                Text("#\(String(format: "%04d", pokemon.id)) -")
                     .font(.headline)
                 Text(pokemon.name.capitalized)
                     .font(.headline)

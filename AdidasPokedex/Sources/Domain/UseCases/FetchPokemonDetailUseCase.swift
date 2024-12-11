@@ -1,3 +1,11 @@
+//
+//  FetchPokemonDetailUseCase.swift
+//  AdidasPokedex
+//
+//  Created by Esteban, Alejandro on 10/12/24.
+//
+
+
 protocol FetchPokemonDetailUseCase {
     func execute(id: Int) async throws -> PokemonDetail
 }

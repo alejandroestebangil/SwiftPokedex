@@ -1,3 +1,11 @@
+//
+//  PokemonDetailViewModel.swift
+//  AdidasPokedex
+//
+//  Created by Esteban, Alejandro on 10/12/24.
+//
+
+
 import Foundation
 
 @MainActor
@@ -7,11 +15,11 @@ final class PokemonDetailViewModel: ObservableObject {
     @Published private(set) var error: Error?
     
     private let pokemonId: Int
-    private let repository: PokemonRepository
+    private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
     
-    init(pokemonId: Int, repository: PokemonRepository) {
+    init(pokemonId: Int, fetchPokemonDetailUseCase: FetchPokemonDetailUseCase) {
         self.pokemonId = pokemonId
-        self.repository = repository
+        self.fetchPokemonDetailUseCase = fetchPokemonDetailUseCase
     }
     
     func loadPokemonDetail() async {
@@ -19,9 +27,9 @@ final class PokemonDetailViewModel: ObservableObject {
         error = nil
         
         do {
-            let detail = try await repository.fetchPokemon(id: pokemonId)
-            pokemonDetail = detail
+            pokemonDetail = try await fetchPokemonDetailUseCase.execute(id: pokemonId)
         } catch {
+            print("Error loading pokemon:", error.localizedDescription)
             self.error = error
         }
         

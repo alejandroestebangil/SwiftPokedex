@@ -6,6 +6,7 @@ struct AdidasPokedexApp: App {
     private let networkService = DefaultNetworkService()
     private let repository: PokemonRepository
     private let filterUseCase: FilterPokemonUseCase
+    private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
     private let pokemonListViewModel: PokemonListViewModel
     
     init() {
@@ -14,8 +15,11 @@ struct AdidasPokedexApp: App {
             networkService: networkService
         )
         
-        // Initialize filter use case
+        // Initialize use cases
         filterUseCase = DefaultFilterPokemonUseCase()
+        fetchPokemonDetailUseCase = DefaultFetchPokemonDetailUseCase(
+            repository: repository
+        )
         
         // Initialize view model with the use cases
         pokemonListViewModel = PokemonListViewModel(
@@ -29,7 +33,8 @@ struct AdidasPokedexApp: App {
     var body: some Scene {
         WindowGroup {
             PokemonListView(
-                viewModel: pokemonListViewModel
+                viewModel: pokemonListViewModel,
+                fetchPokemonDetailUseCase: fetchPokemonDetailUseCase
             )
         }
     }
