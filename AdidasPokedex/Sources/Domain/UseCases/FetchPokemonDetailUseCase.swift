@@ -5,6 +5,7 @@
 //  Created by Esteban, Alejandro on 10/12/24.
 //
 
+import Foundation
 
 protocol FetchPokemonDetailUseCase {
     func execute(id: Int) async throws -> PokemonDetail

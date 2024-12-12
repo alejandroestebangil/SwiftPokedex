@@ -15,12 +15,12 @@ struct PokemonDetailViewDTO: Identifiable {
     let baseStats: [StatDTO]
     
     struct StatDTO: Identifiable {
-        let id: String
+        let id: Int
         let name: String
         let value: Int
         
-        init(name: String, value: Int) {
-            self.id = name // Using name as id since stats are unique
+        init(id: Int, name: String, value: Int) {
+            self.id = id // Using an id even though stats are unique
             self.name = name
             self.value = value
         }
@@ -33,6 +33,8 @@ struct PokemonDetailViewDTO: Identifiable {
         self.types = pokemon.types
         self.height = pokemon.height
         self.weight = pokemon.weight
-        self.baseStats = pokemon.baseStats.map { StatDTO(name: $0.name, value: $0.value) }
+        self.baseStats = pokemon.baseStats.enumerated().map { index, stat in
+            StatDTO(id: index, name: stat.name, value: stat.value)
+        }
     }
 }
