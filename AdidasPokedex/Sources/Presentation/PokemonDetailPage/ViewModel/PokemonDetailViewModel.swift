@@ -17,15 +17,14 @@ final class PokemonDetailViewModel: ObservableObject {
     
     private let pokemonId: Int
     private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
-    private let audioService: PokemonAudioServiceProtocol
+    private let playPokemonCryUseCase: PlayPokemonCryUseCase
     
     init(pokemonId: Int,
          fetchPokemonDetailUseCase: FetchPokemonDetailUseCase,
-         audioService: PokemonAudioServiceProtocol = PokemonAudioService()
-    ) {
+         playPokemonCryUseCase: PlayPokemonCryUseCase) {
         self.pokemonId = pokemonId
         self.fetchPokemonDetailUseCase = fetchPokemonDetailUseCase
-        self.audioService = audioService
+        self.playPokemonCryUseCase = playPokemonCryUseCase
     }
     
     func loadPokemonDetail() async {
@@ -44,12 +43,13 @@ final class PokemonDetailViewModel: ObservableObject {
     }
     
     func playPokemonCry() {
+        guard let pokemonName = pokemonDetail?.name else { return }
+        
         Task {
             isPlayingCry = true
             do {
-                try await audioService.playPokemonCry(for: pokemonId)
+                try await playPokemonCryUseCase.execute(pokemonName: pokemonName)
             } catch {
-                // Handle error if needed
                 print("Error playing cry:", error)
             }
             isPlayingCry = false

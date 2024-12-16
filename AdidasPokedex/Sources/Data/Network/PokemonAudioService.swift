@@ -8,15 +8,16 @@
 import AVFoundation
 
 protocol PokemonAudioServiceProtocol {
-    func playPokemonCry(for id: Int) async throws
+    func playPokemonCry(for name: String) async throws
 }
 
 class PokemonAudioService: PokemonAudioServiceProtocol {
     private var audioPlayer: AVAudioPlayer?
     
-    func playPokemonCry(for id: Int) async throws {
-        let formattedId = String(format: "%03d", id)
-        guard let url = URL(string: "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/\(id).ogg") else {
+    func playPokemonCry(for name: String) async throws {
+        let formattedName = name.lowercased()
+
+        guard let url = URL(string: "https://play.pokemonshowdown.com/audio/cries/\(formattedName).mp3") else {
             throw URLError(.badURL)
         }
         

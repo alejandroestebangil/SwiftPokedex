@@ -10,10 +10,14 @@ import SwiftUI
 struct PokemonListView: View {
     @StateObject var viewModel: PokemonListViewModel
     private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
+    private let playPokemonCryUseCase: PlayPokemonCryUseCase
     
-    init(viewModel: PokemonListViewModel, fetchPokemonDetailUseCase: FetchPokemonDetailUseCase) {
+    init(viewModel: PokemonListViewModel,
+         fetchPokemonDetailUseCase: FetchPokemonDetailUseCase,
+         playPokemonCryUseCase: PlayPokemonCryUseCase) {
         _viewModel = StateObject(wrappedValue: viewModel)
         self.fetchPokemonDetailUseCase = fetchPokemonDetailUseCase
+        self.playPokemonCryUseCase = playPokemonCryUseCase
     }
     
     var body: some View {
@@ -58,13 +62,14 @@ struct PokemonListView: View {
                 NavigationLink {
                     PokemonDetailView(
                         pokemonId: pokemon.id,
-                        fetchPokemonDetailUseCase: fetchPokemonDetailUseCase
+                        fetchPokemonDetailUseCase: fetchPokemonDetailUseCase,
+                        playPokemonCryUseCase: playPokemonCryUseCase
                     )
                 } label: {
                     PokemonRowView(pokemon: pokemon)
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-                .id(viewModel.filteredPokemons.first?.id == pokemon.id ? "top" : nil) // First pokemon of the list
+                .id(viewModel.filteredPokemons.first?.id == pokemon.id ? "top" : nil)
             }
         }
         .listStyle(PlainListStyle())
@@ -109,7 +114,6 @@ struct PokemonRowView: View {
             
             Spacer(minLength: 0)
             
-            // Favorite button
             Button(action: {
                 isFavorite.toggle()
                 // TODO: Add favorite functionality

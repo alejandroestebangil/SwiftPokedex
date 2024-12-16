@@ -7,6 +7,7 @@ struct AdidasPokedexApp: App {
     private let repository: PokemonRepository
     private let filterUseCase: FilterPokemonUseCase
     private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
+    private let playPokemonCryUseCase: PlayPokemonCryUseCase
     private let pokemonListViewModel: PokemonListViewModel
     
     init() {
@@ -19,6 +20,9 @@ struct AdidasPokedexApp: App {
         filterUseCase = DefaultFilterPokemonUseCase()
         fetchPokemonDetailUseCase = DefaultFetchPokemonDetailUseCase(
             repository: repository
+        )
+        playPokemonCryUseCase = DefaultPlayPokemonCryUseCase(
+            audioService: PokemonAudioService()
         )
         
         // Initialize view model with the use cases
@@ -34,7 +38,8 @@ struct AdidasPokedexApp: App {
         WindowGroup {
             PokemonListView(
                 viewModel: pokemonListViewModel,
-                fetchPokemonDetailUseCase: fetchPokemonDetailUseCase
+                fetchPokemonDetailUseCase: fetchPokemonDetailUseCase,
+                playPokemonCryUseCase: playPokemonCryUseCase
             )
         }
     }

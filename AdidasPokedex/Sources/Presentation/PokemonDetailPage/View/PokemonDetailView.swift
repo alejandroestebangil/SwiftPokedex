@@ -10,10 +10,11 @@ import SwiftUI
 struct PokemonDetailView: View {
     @StateObject private var viewModel: PokemonDetailViewModel
     
-    init(pokemonId: Int, fetchPokemonDetailUseCase: FetchPokemonDetailUseCase) {
+    init(pokemonId: Int, fetchPokemonDetailUseCase: FetchPokemonDetailUseCase, playPokemonCryUseCase: PlayPokemonCryUseCase) {
         _viewModel = StateObject(wrappedValue: PokemonDetailViewModel(
             pokemonId: pokemonId,
-            fetchPokemonDetailUseCase: fetchPokemonDetailUseCase
+            fetchPokemonDetailUseCase: fetchPokemonDetailUseCase,
+            playPokemonCryUseCase: playPokemonCryUseCase
         ))
     }
     
