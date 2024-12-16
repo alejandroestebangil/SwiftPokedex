@@ -28,24 +28,32 @@ struct PokemonDetailView: View {
                     
                     // Image, Name and Id
                     VStack(spacing: 16) {
-                        AsyncImage(url: URL(string: pokemon.imageUrl)) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 200, height: 200)
-                        } placeholder: {
-                            ProgressView()
-                                .frame(width: 200, height: 200)
-                        }
-                        
-                        VStack(spacing: 8) {
-                            Text(pokemon.name.capitalized)
-                                .font(.title)
-                                .bold()
-                            
-                            Text("#\(String(format: "%04d", pokemon.id))")
-                                .font(.title3)
-                                .foregroundColor(.secondary)
+                        Button {
+                            viewModel.playPokemonCry()
+                        } label: {
+                            AsyncImage(url: URL(string: pokemon.imageUrl)) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 200, height: 200)
+                            } placeholder: {
+                                ProgressView()
+                                    .frame(width: 200, height: 200)
+                            }
+                            .overlay(alignment: .bottomTrailing) {
+                                if viewModel.isPlayingCry {
+                                    ProgressView()
+                                        .padding(8)
+                                        .background(.ultraThinMaterial)
+                                        .cornerRadius(10)
+                                } else {
+                                    Image(systemName: "speaker.wave.2")
+                                        .foregroundColor(.white)
+                                        .padding(8)
+                                        .background(.ultraThinMaterial)
+                                        .cornerRadius(10)
+                                }
+                            }
                         }
                     }
                     
