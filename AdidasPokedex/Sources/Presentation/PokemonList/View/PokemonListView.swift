@@ -32,6 +32,7 @@ struct PokemonListView: View {
                     Group {
                         if viewModel.isLoading {
                             LoadingView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         } else {
                             pokemonList()
                                 .navigationBarTitleDisplayMode(.inline)
@@ -46,6 +47,7 @@ struct PokemonListView: View {
                         Text(viewModel.error?.localizedDescription ?? "Unknown error")
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
     }
