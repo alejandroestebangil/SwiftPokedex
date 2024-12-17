@@ -17,8 +17,14 @@ let project = Project(
                 ]
             ),
             sources: ["AdidasPokedex/Sources/**"],
-            resources: ["AdidasPokedex/Resources/**"],
-            dependencies: []
+            resources: [
+                "AdidasPokedex/Resources/**",
+                "Sources/Data/LocalStorage/CoreData/Pokemon.xcdatamodeld"
+            ],
+            dependencies: [
+                .sdk(name: "CoreData", type: .framework),
+                .sdk(name: "AVFoundation", type: .framework)
+            ]
         ),
         .target(
             name: "AdidasPokedexTests",
