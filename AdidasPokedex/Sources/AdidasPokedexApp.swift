@@ -4,6 +4,7 @@ import SwiftUI
 struct AdidasPokedexApp: App {
     // Create all dependencies at the app level
     private let networkService = DefaultNetworkService()
+    private let persistence = PersistenceController.shared
     private let repository: PokemonRepository
     private let filterUseCase: FilterPokemonUseCase
     private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
@@ -13,7 +14,8 @@ struct AdidasPokedexApp: App {
     init() {
         // Initialize repository
         repository = DefaultPokemonRepository(
-            networkService: networkService
+            networkService: networkService,
+            persistence: persistence
         )
         
         // Initialize use cases
