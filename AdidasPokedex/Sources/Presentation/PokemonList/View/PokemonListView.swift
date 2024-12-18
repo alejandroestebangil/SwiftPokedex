@@ -97,15 +97,8 @@ struct PokemonRowView: View {
     var body: some View {
         HStack(spacing: 16) {
             HStack {
-                AsyncImage(url: URL(string: pokemon.imageUrl)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: 50, height: 50)
-
+                PokemonAsyncImage(url: pokemon.imageUrl, size: 50)
+                
                 Text("#\(String(format: "%04d", pokemon.id)) -")
                     .font(.headline)
                 Text(pokemon.name.capitalized)
@@ -116,7 +109,6 @@ struct PokemonRowView: View {
             
             Button(action: {
                 isFavorite.toggle()
-                // TODO: Add favorite functionality
             }) {
                 Image(systemName: isFavorite ? "heart.fill" : "heart")
                     .foregroundColor(isFavorite ? .red : .gray)
