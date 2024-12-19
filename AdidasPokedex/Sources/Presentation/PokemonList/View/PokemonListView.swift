@@ -84,37 +84,3 @@ struct LoadingView: View {
         }
     }
 }
-
-struct PokemonRowView: View {
-    let pokemon: PokemonListViewDTO
-    @State private var isFavorite: Bool
-    
-    init(pokemon: PokemonListViewDTO) {
-        self.pokemon = pokemon
-        self._isFavorite = State(initialValue: pokemon.isFavorite)
-    }
-    
-    var body: some View {
-        HStack(spacing: 16) {
-            HStack {
-                PokemonAsyncImage(url: pokemon.imageUrl, size: 50)
-                
-                Text("#\(String(format: "%04d", pokemon.id)) -")
-                    .font(.headline)
-                Text(pokemon.name.capitalized)
-                    .font(.headline)
-            }
-            
-            Spacer(minLength: 0)
-            
-            Button(action: {
-                isFavorite.toggle()
-            }) {
-                Image(systemName: isFavorite ? "heart.fill" : "heart")
-                    .foregroundColor(isFavorite ? .red : .gray)
-            }
-            .buttonStyle(PlainButtonStyle())
-        }
-        .padding(.vertical, 8)
-    }
-}

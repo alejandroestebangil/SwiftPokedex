@@ -44,7 +44,6 @@ final class PokemonDetailViewModel: ObservableObject {
     
     func playPokemonCry() {
         guard let pokemonName = pokemonDetail?.name else { return }
-        
         Task {
             isPlayingCry = true
             do {

@@ -27,7 +27,7 @@ struct FilterBar: View {
     }
 }
 
-// Generation Menu
+/// Generation Menu
 private struct GenerationMenu: View {
     @ObservedObject var viewModel: PokemonListViewModel
     
@@ -52,7 +52,7 @@ private struct GenerationMenu: View {
     }
 }
 
-// Sort Type Menu
+/// Sort Type Menu
 private struct SortTypeMenu: View {
     @ObservedObject var viewModel: PokemonListViewModel
     
@@ -80,7 +80,7 @@ private struct SortTypeMenu: View {
     }
 }
 
-// Sort Order Button
+/// Sort Order Button
 private struct SortOrderButton: View {
     @ObservedObject var viewModel: PokemonListViewModel
     
@@ -94,6 +94,7 @@ private struct SortOrderButton: View {
     }
 }
 
+/// Filters Display Names
 extension FilterBar {
     static func getGenerationDisplayName(_ generation: PokemonGeneration) -> String {
         generation == .all ? "All Gens" : "Gen \(generation.rawValue)"

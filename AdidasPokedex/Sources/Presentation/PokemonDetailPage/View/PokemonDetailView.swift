@@ -26,40 +26,31 @@ struct PokemonDetailView: View {
                     .padding(.top, 170)
             } else if let pokemon = viewModel.pokemonDetail {
                 VStack(spacing: 24) {
-                    
-                    // Image, Name and Id
-                    VStack(spacing: 16) {
+                    VStack(spacing: Constants.spacingStacks) {
+                        /// Image
                         Button {
                             viewModel.playPokemonCry()
                         } label: {
-                            AsyncImage(url: URL(string: pokemon.imageUrl)) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 200, height: 200)
-                            } placeholder: {
-                                ProgressView()
-                                    .frame(width: 200, height: 200)
-                            }
-                            .overlay(alignment: .bottomTrailing) {
-                                if viewModel.isPlayingCry {
-                                    ProgressView()
-                                        .padding(8)
-                                        .background(.ultraThinMaterial)
-                                        .cornerRadius(10)
-                                } else {
-                                    Image(systemName: "speaker.wave.2")
-                                        .foregroundColor(.white)
-                                        .padding(8)
-                                        .background(.ultraThinMaterial)
-                                        .cornerRadius(10)
-                                }
-                            }
+                            PokemonAsyncImage(url: pokemon.imageUrl, size: Constants.imageSize)
+                             .overlay(alignment: .bottomTrailing) {
+                                 if viewModel.isPlayingCry {
+                                     ProgressView()
+                                         .padding(Constants.cryButtonPadding)
+                                         .background(.ultraThinMaterial)
+                                         .cornerRadius(Constants.cryButtonRadius)
+                                 } else {
+                                     Image(systemName: "speaker.wave.2")
+                                         .foregroundColor(.white)
+                                         .padding(Constants.cryButtonPadding)
+                                         .background(.ultraThinMaterial)
+                                         .cornerRadius(Constants.cryButtonRadius)
+                                 }
+                             }
                         }
                     }
                     
-                    // Types
-                    HStack(spacing: 16) {
+                    /// Types
+                    HStack(spacing: Constants.spacingStacks) {
                         ForEach(pokemon.types, id: \.self) { type in
                             Text(type.capitalized)
                                 .font(.headline)
@@ -67,14 +58,14 @@ struct PokemonDetailView: View {
                                 .padding(.horizontal, 24)
                                 .padding(.vertical, 8)
                                 .background(typeColor(for: type))
-                                .cornerRadius(12)
+                                .cornerRadius(Constants.statsCornerRadius)
                         }
                     }
                     
-                    // Physical Stats Card
-                    VStack(spacing: 16) {
+                    /// Height and Weight
+                    VStack(spacing: Constants.spacingStacks) {
                         HStack(spacing: 40) {
-                            VStack(spacing: 4) {
+                            VStack(spacing: Constants.spacingHeightWeight) {
                                 Text("Height")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
@@ -83,7 +74,7 @@ struct PokemonDetailView: View {
                                     .bold()
                             }
                             
-                            VStack(spacing: 4) {
+                            VStack(spacing: Constants.spacingHeightWeight) {
                                 Text("Weight")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
@@ -93,13 +84,13 @@ struct PokemonDetailView: View {
                             }
                         }
                     }
-                    .padding(20)
+                    .padding(Constants.statsPadding)
                     .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .shadow(radius: 2)
+                    .cornerRadius(Constants.statsCornerRadius)
+                    .shadow(radius: Constants.statsShadow)
                     
-                    // Stats Card
-                    VStack(alignment: .leading, spacing: 16) {
+                    /// Stats
+                    VStack(alignment: .leading, spacing: Constants.spacingStacks) {
                         Text("Base Stats")
                             .font(.headline)
                             .padding(.bottom, 8)
@@ -120,23 +111,23 @@ struct PokemonDetailView: View {
                                     ZStack(alignment: .leading) {
                                         Rectangle()
                                             .fill(Color(.systemGray5))
-                                            .frame(height: 6)
-                                            .cornerRadius(3)
+                                            .frame(height: Constants.statsBarHeight)
+                                            .cornerRadius(Constants.statsBarRadius)
                                         
                                         Rectangle()
                                             .fill(statColor(value: stat.value))
-                                            .frame(width: geometry.size.width * CGFloat(stat.value) / 181.0, height: 6)
-                                            .cornerRadius(3)
+                                            .frame(width: geometry.size.width * CGFloat(stat.value) / 181.0, height: Constants.statsBarHeight)
+                                            .cornerRadius(Constants.statsBarRadius)
                                     }
                                 }
                                 .frame(height: 6)
                             }
                         }
                     }
-                    .padding(20)
+                    .padding(Constants.statsPadding)
                     .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .shadow(radius: 2)
+                    .cornerRadius(Constants.statsCornerRadius)
+                    .shadow(radius: Constants.statsShadow)
                 }
                 .padding()
             }
@@ -147,51 +138,16 @@ struct PokemonDetailView: View {
         }
     }
     
-    private func typeColor(for type: String) -> Color {
-        switch type.lowercased() {
-        case "normal": return Color(.systemGray)
-        case "fighting": return Color(.systemRed)
-        case "flying": return Color(.systemBlue)
-        case "poison": return .purple
-        case "ground": return .brown
-        case "rock": return .brown
-        case "bug": return .green
-        case "ghost": return .purple
-        case "steel": return Color(.systemGray)
-        case "fire": return .red
-        case "water": return .blue
-        case "grass": return .green
-        case "electric": return .yellow
-        case "psychic": return .pink
-        case "ice": return Color(.systemTeal)
-        case "dragon": return .purple
-        case "dark": return Color(.darkGray)
-        case "fairy": return .pink
-        default: return Color(.systemGray)
-        }
-    }
-    
-    private func statColor(value: Int) -> Color {
-        if value < 60 {
-            return .red
-        } else if value < 90 {
-            return .orange
-        } else if value < 120 {
-            return .green
-        } else {
-            return .indigo
-        }
-    }
-    
-    private func statName(_ name: String) -> String {
-        switch name {
-        case "hp": return "HP"
-        case "attack": return "Attack"
-        case "defense": return "Defense"
-        case "special-attack": return "Special Attack"
-        case "special-defense": return "Special Defense"
-        case "speed": return "Speed"
-        default: return name.capitalized
-        }
+    private struct Constants {
+        static let imageSize: CGFloat = 200
+        static let cryButtonRadius: CGFloat = 10
+        static let cryButtonPadding: CGFloat = 8
+        static let spacingStacks: CGFloat = 16
+        static let spacingHeightWeight: CGFloat = 4
+        static let statsPadding: CGFloat = 20
+        static let statsShadow: CGFloat = 2
+        static let statsCornerRadius: CGFloat = 12
+        static let statsBarHeight: CGFloat = 6
+        static let statsBarRadius: CGFloat = 3
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor // Added so it runs on the main thread
+@MainActor /// Added so it runs on the main thread
 final class PokemonListViewModel: ObservableObject {
     @Published private(set) var filteredPokemons: [PokemonListViewDTO] = []
     @Published private(set) var isLoading = false

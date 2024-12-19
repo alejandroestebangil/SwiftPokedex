@@ -9,12 +9,10 @@ struct PokemonListViewDTO: Identifiable {
     let id: Int
     let name: String
     let imageUrl: String
-    var isFavorite: Bool
     
-    init(pokemon: Pokemon, isFavorite: Bool = false) {
+    init(pokemon: Pokemon) {
         self.id = pokemon.id
         self.name = pokemon.name
         self.imageUrl = pokemon.imageUrl
-        self.isFavorite = isFavorite
     }
 }

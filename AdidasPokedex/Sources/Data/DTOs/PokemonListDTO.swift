@@ -18,12 +18,12 @@ struct PokemonListItemDTO: Decodable {
     let url: String
     
     var id: Int {
-        // Extract ID from the URL since PokeAPI includes it there
+        /// Extract ID from the URL since PokeAPI includes it there
         guard let idString = url.split(separator: "/").last else { return 0 }
         return Int(idString) ?? 0
     }
     
-    // Convert DTO to domain model
+    /// Convert DTO to domain model
     func toDomain() -> Pokemon {
         Pokemon(
             id: id,
@@ -33,7 +33,7 @@ struct PokemonListItemDTO: Decodable {
     }
 }
 
-// Extension to convert response to domain models
+/// Extension to convert response to domain models
 extension PokemonListResponseDTO {
     func toDomain() -> [Pokemon] {
         results.map { $0.toDomain() }

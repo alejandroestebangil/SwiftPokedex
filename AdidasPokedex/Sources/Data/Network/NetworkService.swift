@@ -5,7 +5,6 @@
 //  Created by Esteban, Alejandro1 on 2/12/24.
 //
 
-
 import Foundation
 
 protocol NetworkService {
@@ -20,13 +19,13 @@ final class DefaultNetworkService: NetworkService {
         
         let (data, response) = try await URLSession.shared.data(from: url)
         
-        // Validation HTTP Response
+        /// Validation HTTP Response
         guard let httpResponse = response as? HTTPURLResponse,
               (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
         
-        // Decode the JSON into the specified type
+        /// Decode the JSON into the specified type
         return try JSONDecoder().decode(T.self, from: data)
     }
 }

@@ -19,25 +19,25 @@ final class DefaultPokemonRepository: PokemonRepository {
     
     func fetchPokemonList() async throws -> [Pokemon] {
         do {
-            // Try to fetch from API
+            /// Try to fetch from API
             let response: PokemonListResponseDTO = try await networkService.fetch(from: .pokemonList())
             let pokemons = response.toDomain()
             
-            // Save to CoreData
+            /// Save to CoreData
             try await savePokemonsToCoreData(pokemons)
             return pokemons
         } catch {
-            // If API fails, try to fetch from CoreData
+            /// If API fails, try to fetch from CoreData
             return try fetchPokemonsFromCoreData()
         }
     }
     
     private func savePokemonsToCoreData(_ pokemons: [Pokemon]) async throws {
         try await persistence.viewContext.perform {
-            // Clear existing data
+            /// Clear existing data
             self.persistence.deleteAllPokemons()
             
-            // Save new data
+            /// Save new data
             for pokemon in pokemons {
                 let entity = PokemonEntity(context: self.persistence.viewContext)
                 entity.update(from: pokemon)

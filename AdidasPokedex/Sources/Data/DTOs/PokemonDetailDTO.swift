@@ -36,6 +36,7 @@ struct PokemonDetailDTO: Decodable {
         }
     }
     
+    /// Convert DTO to domain model
     func toDomain() -> PokemonDetail {
         PokemonDetail(
             id: id,

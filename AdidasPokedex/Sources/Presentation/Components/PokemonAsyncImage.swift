@@ -10,6 +10,7 @@ import SwiftUI
 struct PokemonAsyncImage: View {
     let url: String?
     let size: CGFloat
+    static let imageOpacity: Double = 0.3
     
     var body: some View {
         AsyncImage(url: URL(string: url ?? "")) { phase in
@@ -22,15 +23,15 @@ struct PokemonAsyncImage: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             case .failure:
-                Image("pokeball-logo")
+                Image("pokemon-not-avaliable")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .opacity(0.3)
+                    .opacity(PokemonAsyncImage.imageOpacity)
             @unknown default:
-                Image("pokeball-logo")
+                Image("pokemon-not-avaliable")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .opacity(0.3)
+                    .opacity(PokemonAsyncImage.imageOpacity)
             }
         }
         .frame(width: size, height: size)
