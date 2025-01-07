@@ -23,7 +23,7 @@ let project = Project(
             ],
             dependencies: [
                 .sdk(name: "CoreData", type: .framework),
-                .sdk(name: "AVFoundation", type: .framework)
+                .sdk(name: "AVFoundation", type: .framework),
             ]
         ),
         .target(
