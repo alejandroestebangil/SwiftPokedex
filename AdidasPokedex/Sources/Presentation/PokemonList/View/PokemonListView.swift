@@ -9,15 +9,9 @@ import SwiftUI
 
 struct PokemonListView: View {
     @StateObject var viewModel: PokemonListViewModel
-    private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
-    private let playPokemonCryUseCase: PlayPokemonCryUseCase
     
-    init(viewModel: PokemonListViewModel,
-         fetchPokemonDetailUseCase: FetchPokemonDetailUseCase,
-         playPokemonCryUseCase: PlayPokemonCryUseCase) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-        self.fetchPokemonDetailUseCase = fetchPokemonDetailUseCase
-        self.playPokemonCryUseCase = playPokemonCryUseCase
+    init() {
+        _viewModel = StateObject(wrappedValue: PokemonListViewModel())
     }
     
     var body: some View {
@@ -61,9 +55,7 @@ struct PokemonListView: View {
             ForEach(viewModel.filteredPokemons) { pokemon in
                 NavigationLink {
                     PokemonDetailView(
-                        pokemonId: pokemon.id,
-                        fetchPokemonDetailUseCase: fetchPokemonDetailUseCase,
-                        playPokemonCryUseCase: playPokemonCryUseCase
+                        pokemonId: pokemon.id
                     )
                 } label: {
                     PokemonRowView(pokemon: pokemon)

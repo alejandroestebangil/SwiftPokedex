@@ -7,15 +7,11 @@
 
 import CoreData
 import Foundation
+import Dependencies
 
 final class DefaultPokemonRepository: PokemonRepository {
-    private let networkService: NetworkService
-    private let persistence: PersistenceController
-    
-    init(networkService: NetworkService, persistence: PersistenceController) {
-        self.networkService = networkService
-        self.persistence = persistence
-    }
+    @Dependency(\.networkService) private var networkService
+    @Dependency(\.persistenceController) private var persistenceController
     
     func fetchPokemonList() async throws -> [Pokemon] {
         do {
@@ -32,18 +28,23 @@ final class DefaultPokemonRepository: PokemonRepository {
         }
     }
     
+    func fetchPokemonDetail(id: Int) async throws -> PokemonDetail {
+        let dto: PokemonDetailDTO = try await networkService.fetch(from: .pokemonDetail(id: id))
+        return dto.toDomain()
+    }
+    
     private func savePokemonsToCoreData(_ pokemons: [Pokemon]) async throws {
-        try await persistence.viewContext.perform {
+        try await persistenceController.viewContext.perform {
             /// Clear existing data
-            self.persistence.deleteAllPokemons()
+            self.persistenceController.deleteAllPokemons()
             
             /// Save new data
             for pokemon in pokemons {
-                let entity = PokemonEntity(context: self.persistence.viewContext)
+                let entity = PokemonEntity(context: self.persistenceController.viewContext)
                 entity.update(from: pokemon)
             }
             
-            try self.persistence.viewContext.save()
+            try self.persistenceController.viewContext.save()
         }
     }
     
@@ -51,12 +52,7 @@ final class DefaultPokemonRepository: PokemonRepository {
         let request: NSFetchRequest<PokemonEntity> = PokemonEntity.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
         
-        let entities = try persistence.viewContext.fetch(request)
+        let entities = try persistenceController.viewContext.fetch(request)
         return entities.map { $0.toDomain() }
-    }
-    
-    func fetchPokemonDetail(id: Int) async throws -> PokemonDetail {
-        let dto: PokemonDetailDTO = try await networkService.fetch(from: .pokemonDetail(id: id))
-        return dto.toDomain()
     }
 }

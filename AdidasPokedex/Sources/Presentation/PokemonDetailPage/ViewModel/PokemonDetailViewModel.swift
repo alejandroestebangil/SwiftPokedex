@@ -7,6 +7,7 @@
 
 
 import Foundation
+import Dependencies
 
 @MainActor
 final class PokemonDetailViewModel: ObservableObject {
@@ -15,16 +16,13 @@ final class PokemonDetailViewModel: ObservableObject {
     @Published private(set) var error: Error?
     @Published private(set) var isPlayingCry = false
     
-    private let pokemonId: Int
-    private let fetchPokemonDetailUseCase: FetchPokemonDetailUseCase
-    private let playPokemonCryUseCase: PlayPokemonCryUseCase
+    @Dependency(\.fetchPokemonDetailUseCase) private var fetchPokemonDetailUseCase
+    @Dependency(\.playPokemonCryUseCase) private var playPokemonCryUseCase
     
-    init(pokemonId: Int,
-         fetchPokemonDetailUseCase: FetchPokemonDetailUseCase,
-         playPokemonCryUseCase: PlayPokemonCryUseCase) {
+    let pokemonId: Int
+    
+    init(pokemonId: Int) {
         self.pokemonId = pokemonId
-        self.fetchPokemonDetailUseCase = fetchPokemonDetailUseCase
-        self.playPokemonCryUseCase = playPokemonCryUseCase
     }
     
     func loadPokemonDetail() async {

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftUI
+import Dependencies
 
 @MainActor /// Added so it runs on the main thread
 final class PokemonListViewModel: ObservableObject {
@@ -17,15 +17,10 @@ final class PokemonListViewModel: ObservableObject {
     @Published var selectedSortType: SortType = .id
     @Published var selectedSortOrder: SortOrder = .ascending
     
-    private var pokemons: [Pokemon] = []
-    private let fetchPokemonListUseCase: FetchPokemonListUseCase
-    private let filterPokemonUseCase: FilterPokemonUseCase
+    @Dependency(\.fetchPokemonListUseCase) private var fetchPokemonListUseCase
+    @Dependency(\.filterPokemonUseCase) private var filterPokemonUseCase
     
-    init(fetchPokemonListUseCase: FetchPokemonListUseCase,
-         filterPokemonUseCase: FilterPokemonUseCase) {
-        self.fetchPokemonListUseCase = fetchPokemonListUseCase
-        self.filterPokemonUseCase = filterPokemonUseCase
-    }
+    private var pokemons: [Pokemon] = []
     
     func loadPokemonList() async {
         isLoading = true
