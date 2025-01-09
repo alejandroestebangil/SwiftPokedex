@@ -15,7 +15,7 @@ final class FetchPokemonListUseCaseTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockRepository = MockPokemonRepository()
-        sut = DefaultFetchPokemonListUseCase(repository: mockRepository)
+        sut = DefaultFetchPokemonListUseCase()
     }
     
     override func tearDown() {

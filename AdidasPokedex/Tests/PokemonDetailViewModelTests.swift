@@ -19,9 +19,7 @@ final class PokemonDetailViewModelTests: XCTestCase {
         mockFetchDetailUseCase = MockFetchPokemonDetailUseCase()
         mockPlayCryUseCase = MockPlayPokemonCryUseCase()
         sut = PokemonDetailViewModel(
-            pokemonId: 1,
-            fetchPokemonDetailUseCase: mockFetchDetailUseCase,
-            playPokemonCryUseCase: mockPlayCryUseCase
+            pokemonId: 1
         )
     }
     

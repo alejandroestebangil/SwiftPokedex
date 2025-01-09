@@ -18,10 +18,7 @@ final class PokemonListViewModelTests: XCTestCase {
         try await super.setUp()
         mockFetchListUseCase = MockFetchPokemonListUseCase()
         mockFilterUseCase = MockFilterPokemonUseCase()
-        sut = PokemonListViewModel(
-            fetchPokemonListUseCase: mockFetchListUseCase,
-            filterPokemonUseCase: mockFilterUseCase
-        )
+        sut = PokemonListViewModel()
     }
     
     override func tearDown() async throws {
