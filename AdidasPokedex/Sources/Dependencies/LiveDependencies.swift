@@ -27,20 +27,16 @@ struct PokemonRepositoryClient: DependencyKey {
 }
 
 // MARK: - Use Cases
-struct FetchPokemonListUseCaseClient: DependencyKey {
-    static let liveValue: FetchPokemonListUseCase = DefaultFetchPokemonListUseCase(
-        repository: PokemonRepositoryClient.liveValue
-    )
+struct FetchPokemonDetailUseCaseClient: DependencyKey {
+    static let liveValue: FetchPokemonDetailUseCase = DefaultFetchPokemonDetailUseCase()
 }
 
 struct FilterPokemonUseCaseClient: DependencyKey {
     static let liveValue: FilterPokemonUseCase = DefaultFilterPokemonUseCase()
 }
 
-struct FetchPokemonDetailUseCaseClient: DependencyKey {
-    static let liveValue: FetchPokemonDetailUseCase = DefaultFetchPokemonDetailUseCase(
-        repository: PokemonRepositoryClient.liveValue
-    )
+struct FetchPokemonListUseCaseClient: DependencyKey {
+    static let liveValue: FetchPokemonListUseCase = DefaultFetchPokemonListUseCase()
 }
 
 struct PlayPokemonCryUseCaseClient: DependencyKey {
