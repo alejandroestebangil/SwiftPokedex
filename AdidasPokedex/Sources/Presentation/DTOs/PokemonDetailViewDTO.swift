@@ -5,7 +5,7 @@
 //  Created by Esteban, Alejandro on 11/12/24.
 //
 
-struct PokemonDetailViewDTO: Identifiable {
+struct PokemonDetailViewDTO: Identifiable, Equatable {
     let id: Int
     let name: String
     let imageUrl: String
@@ -14,7 +14,7 @@ struct PokemonDetailViewDTO: Identifiable {
     let weight: Double
     let baseStats: [StatDTO]
     
-    struct StatDTO: Identifiable {
+    struct StatDTO: Identifiable, Equatable {
         let id: Int
         let name: String
         let value: Int

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct PokemonListView: View {
     @StateObject var viewModel: PokemonListViewModel
@@ -55,7 +56,13 @@ struct PokemonListView: View {
             ForEach(viewModel.filteredPokemons) { pokemon in
                 NavigationLink {
                     PokemonDetailView(
-                        pokemonId: pokemon.id
+                        store: Store(
+                            initialState: PokemonDetailViewFeature.State(
+                                pokemonId: pokemon.id
+                            )
+                        ) {
+                            PokemonDetailViewFeature()
+                        }
                     )
                 } label: {
                     PokemonRowView(pokemon: pokemon)

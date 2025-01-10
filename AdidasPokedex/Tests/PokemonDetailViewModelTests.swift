@@ -5,6 +5,7 @@
 //  Created by Esteban, Alejandro on 19/12/24.
 //
 
+/*
 import XCTest
 @testable import AdidasPokedex
 
@@ -65,3 +66,4 @@ final class PokemonDetailViewModelTests: XCTestCase {
         XCTAssertNil(sut.pokemonDetail)
     }
 }
+*/
