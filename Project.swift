@@ -1,13 +1,13 @@
 import ProjectDescription
 
 let project = Project(
-    name: "AdidasPokedex",
+    name: "SwiftPokedex",
     targets: [
         .target(
-            name: "AdidasPokedex",
+            name: "SwiftPokedex",
             destinations: .iOS,
             product: .app,
-            bundleId: "io.tuist.AdidasPokedex",
+            bundleId: "io.tuist.SwiftPokedex",
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
@@ -16,9 +16,9 @@ let project = Project(
                     ],
                 ]
             ),
-            sources: ["AdidasPokedex/Sources/**"],
+            sources: ["SwiftPokedex/Sources/**"],
             resources: [
-                "AdidasPokedex/Resources/**",
+                "SwiftPokedex/Resources/**",
             ],
             dependencies: [
                 .sdk(name: "CoreData", type: .framework),
@@ -28,15 +28,15 @@ let project = Project(
             ]
         ),
         .target(
-            name: "AdidasPokedexTests",
+            name: "SwiftPokedexTests",
             destinations: .iOS,
             product: .unitTests,
-            bundleId: "io.tuist.AdidasPokedexTests",
+            bundleId: "io.tuist.SwiftPokedexTests",
             infoPlist: .default,
-            sources: ["AdidasPokedex/Tests/**"],
+            sources: ["SwiftPokedex/Tests/**"],
             resources: [],
             dependencies: [
-                .target(name: "AdidasPokedex"),
+                .target(name: "SwiftPokedex"),
                 .external(name: "Dependencies"),
                 .external(name: "ComposableArchitecture")
             ]

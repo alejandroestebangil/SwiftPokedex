@@ -14,7 +14,7 @@ import PackageDescription
 #endif
 
 let package = Package(
-    name: "AdidasPokedex",
+    name: "SwiftPokedex",
     dependencies: [
         // Add your own dependencies here:
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.6.3"),
