@@ -6,31 +6,23 @@
 //
 
 import XCTest
+import Dependencies
 @testable import AdidasPokedex
 
 final class FetchPokemonListUseCaseTests: XCTestCase {
-    var sut: DefaultFetchPokemonListUseCase!
-    var mockRepository: MockPokemonRepository!
-    
-    override func setUp() {
-        super.setUp()
-        mockRepository = MockPokemonRepository()
-        sut = DefaultFetchPokemonListUseCase()
-    }
-    
-    override func tearDown() {
-        sut = nil
-        mockRepository = nil
-        super.tearDown()
-    }
-    
     func testExecute_Success() async throws {
         /// Given
         let pokemon = Pokemon(id: 1, name: "Bulbasaur", imageUrl: "url")
+        let mockRepository = MockPokemonRepository()
         mockRepository.pokemonListResult = .success([pokemon])
         
         /// When
-        let result = try await sut.execute()
+        let result = try await withDependencies {
+            $0.registerTestDependencies(repository: mockRepository)
+        } operation: {
+            let useCase = DefaultFetchPokemonListUseCase()
+            return try await useCase.execute()
+        }
         
         /// Then
         XCTAssertEqual(result.count, 1)
@@ -38,12 +30,18 @@ final class FetchPokemonListUseCaseTests: XCTestCase {
     }
     
     func testExecute_Failure() async {
-        /// Given
+        // Given
+        let mockRepository = MockPokemonRepository()
         mockRepository.pokemonListResult = .failure(TestError.someError)
         
-        /// When/Then
+        // When/Then
         do {
-            _ = try await sut.execute()
+            _ = try await withDependencies {
+                $0.registerTestDependencies(repository: mockRepository)
+            } operation: {
+                let useCase = DefaultFetchPokemonListUseCase()
+                return try await useCase.execute()
+            }
             XCTFail("Expected error to be thrown")
         } catch {
             XCTAssertTrue(error is TestError)

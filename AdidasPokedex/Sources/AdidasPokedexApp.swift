@@ -1,10 +1,13 @@
 import SwiftUI
+import XCTestDynamicOverlay
 
 @main
 struct AdidasPokedexApp: App {
     var body: some Scene {
         WindowGroup {
-            PokemonListView()
+            if !_XCTIsTesting {
+                PokemonListView()
+            }
         }
     }
 }

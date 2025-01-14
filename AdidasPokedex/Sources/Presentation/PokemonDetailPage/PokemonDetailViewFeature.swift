@@ -5,30 +5,66 @@
 //  Created by Esteban, Alejandro on 9/1/25.
 //
 
+import Foundation
 import ComposableArchitecture
 import Dependencies
 
-@Reducer
-struct PokemonDetailViewFeature {
-    struct State: Equatable {
-        let pokemonId: Int
-        var pokemonDetail: PokemonDetailViewDTO?
-        var isLoading = false
-        var isPlayingCry = false
-        var error: String?
+public struct PokemonDetailViewFeature: Reducer {
+    public struct State: Equatable {
+        public let pokemonId: Int
+        public var pokemonDetail: PokemonDetailViewDTO?
+        public var isLoading = false
+        public var isPlayingCry = false
+        public var error: String?
+        
+        public init(pokemonId: Int) {
+            self.pokemonId = pokemonId
+        }
     }
     
-    enum Action {
+    public enum Action: Equatable {
         case onAppear
         case pokemonDetailResponse(TaskResult<PokemonDetail>)
         case playCry
         case playCryResponse(TaskResult<Void>)
+        
+        // Custom Equatable implementation for TaskResult cases
+        public static func == (lhs: Action, rhs: Action) -> Bool {
+            switch (lhs, rhs) {
+            case (.onAppear, .onAppear):
+                return true
+            case let (.pokemonDetailResponse(lhsResult), .pokemonDetailResponse(rhsResult)):
+                switch (lhsResult, rhsResult) {
+                case let (.success(lhsDetail), .success(rhsDetail)):
+                    return lhsDetail.id == rhsDetail.id
+                case let (.failure(lhsError), .failure(rhsError)):
+                    return lhsError.localizedDescription == rhsError.localizedDescription
+                default:
+                    return false
+                }
+            case (.playCry, .playCry):
+                return true
+            case let (.playCryResponse(lhsResult), .playCryResponse(rhsResult)):
+                switch (lhsResult, rhsResult) {
+                case (.success, .success):
+                    return true
+                case let (.failure(lhsError), .failure(rhsError)):
+                    return lhsError.localizedDescription == rhsError.localizedDescription
+                default:
+                    return false
+                }
+            default:
+                return false
+            }
+        }
     }
     
     @Dependency(\.fetchPokemonDetailUseCase) var fetchPokemonDetailUseCase
     @Dependency(\.playPokemonCryUseCase) var playPokemonCryUseCase
     
-    var body: some ReducerOf<Self> {
+    public init() {}
+    
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:

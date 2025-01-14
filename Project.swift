@@ -19,11 +19,12 @@ let project = Project(
             sources: ["AdidasPokedex/Sources/**"],
             resources: [
                 "AdidasPokedex/Resources/**",
-                "Sources/Data/LocalStorage/CoreData/Pokemon.xcdatamodeld"
             ],
             dependencies: [
                 .sdk(name: "CoreData", type: .framework),
                 .sdk(name: "AVFoundation", type: .framework),
+                .external(name: "Dependencies"),
+                .external(name: "ComposableArchitecture")
             ]
         ),
         .target(
@@ -34,7 +35,11 @@ let project = Project(
             infoPlist: .default,
             sources: ["AdidasPokedex/Tests/**"],
             resources: [],
-            dependencies: [.target(name: "AdidasPokedex")]
+            dependencies: [
+                .target(name: "AdidasPokedex"),
+                .external(name: "Dependencies"),
+                .external(name: "ComposableArchitecture")
+            ]
         ),
     ]
 )

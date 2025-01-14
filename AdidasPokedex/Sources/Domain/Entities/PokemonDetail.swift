@@ -8,17 +8,32 @@
 
 import Foundation
 
-struct PokemonDetail: Identifiable {
-    let id: Int
-    let name: String
-    let imageUrl: String
-    let types: [String]
-    let weight: Double
-    let height: Double
-    let baseStats: [Stat]
+public struct PokemonDetail: Identifiable {
+    public let id: Int
+    public let name: String
+    public let imageUrl: String
+    public let types: [String]
+    public let weight: Double
+    public let height: Double
+    public let baseStats: [Stat]
     
-    struct Stat {
-        let name: String
-        let value: Int
+    public struct Stat {
+        public let name: String
+        public let value: Int
+        
+        public init(name: String, value: Int) {
+            self.name = name
+            self.value = value
+        }
+    }
+    
+    public init(id: Int, name: String, imageUrl: String, types: [String], weight: Double, height: Double, baseStats: [Stat]) {
+        self.id = id
+        self.name = name
+        self.imageUrl = imageUrl
+        self.types = types
+        self.weight = weight
+        self.height = height
+        self.baseStats = baseStats
     }
 }

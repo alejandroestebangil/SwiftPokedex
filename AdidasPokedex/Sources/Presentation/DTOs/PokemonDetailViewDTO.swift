@@ -5,19 +5,19 @@
 //  Created by Esteban, Alejandro on 11/12/24.
 //
 
-struct PokemonDetailViewDTO: Identifiable, Equatable {
-    let id: Int
-    let name: String
-    let imageUrl: String
-    let types: [String]
-    let height: Double
-    let weight: Double
-    let baseStats: [StatDTO]
+public struct PokemonDetailViewDTO: Identifiable, Equatable {
+    public let id: Int
+    public let name: String
+    public let imageUrl: String
+    public let types: [String]
+    public let height: Double
+    public let weight: Double
+    public let baseStats: [StatDTO]
     
-    struct StatDTO: Identifiable, Equatable {
-        let id: Int
-        let name: String
-        let value: Int
+    public struct StatDTO: Identifiable, Equatable {
+        public let id: Int
+        public let name: String
+        public let value: Int
         
         init(id: Int, name: String, value: Int) {
             self.id = id // Using an id even though stats are unique
