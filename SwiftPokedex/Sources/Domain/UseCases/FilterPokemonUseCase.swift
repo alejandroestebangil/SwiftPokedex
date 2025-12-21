@@ -1,10 +1,3 @@
-//
-//  FilterPokemonUseCase.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 5/12/24.
-//
-
 import Foundation
 
 protocol FilterPokemonUseCase {

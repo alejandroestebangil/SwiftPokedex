@@ -1,10 +1,3 @@
-//
-//  FetchPokemonDetailUseCase.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 10/12/24.
-//
-
 import Foundation
 import Dependencies
 

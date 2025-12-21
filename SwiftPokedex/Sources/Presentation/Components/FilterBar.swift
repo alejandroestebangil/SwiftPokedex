@@ -1,10 +1,3 @@
-//
-//  FilterBar.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 6/12/24.
-//
-
 import SwiftUI
 
 struct FilterBar: View {

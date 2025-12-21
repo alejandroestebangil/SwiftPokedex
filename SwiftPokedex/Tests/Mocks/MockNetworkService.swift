@@ -1,10 +1,3 @@
-//
-//  MockNetworkService.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 8/1/25.
-//
-
 import Foundation
 @testable import SwiftPokedex
 

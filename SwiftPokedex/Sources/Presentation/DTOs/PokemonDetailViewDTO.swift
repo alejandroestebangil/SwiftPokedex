@@ -1,10 +1,3 @@
-//
-//  PokemonDetailViewDTO.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 11/12/24.
-//
-
 public struct PokemonDetailViewDTO: Identifiable, Equatable {
     public let id: Int
     public let name: String

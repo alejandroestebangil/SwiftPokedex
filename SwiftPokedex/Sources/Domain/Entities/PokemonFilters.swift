@@ -1,10 +1,3 @@
-//
-//  PokemonFilters.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 5/12/24.
-//
-
 import Foundation
 
 enum PokemonGeneration: Int, CaseIterable {

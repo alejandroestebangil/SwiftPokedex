@@ -1,10 +1,3 @@
-//
-//  TestDependencies.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 10/1/25.
-//
-
 import Dependencies
 import XCTest
 @testable import SwiftPokedex

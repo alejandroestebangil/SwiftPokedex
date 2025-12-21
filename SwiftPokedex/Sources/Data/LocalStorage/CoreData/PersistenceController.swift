@@ -1,10 +1,3 @@
-//
-//  PersistenceController.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 18/12/24.
-//
-
 import CoreData
 
 struct PersistenceController {

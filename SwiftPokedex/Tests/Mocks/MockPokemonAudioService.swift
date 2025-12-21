@@ -1,11 +1,3 @@
-//
-//  MockPokemonAudioService.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 19/12/24.
-//
-
-
 import Foundation
 @testable import SwiftPokedex
 

@@ -1,10 +1,3 @@
-//
-//  LiveDependencies.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 7/1/25.
-//
-
 import Dependencies
 import Foundation
 

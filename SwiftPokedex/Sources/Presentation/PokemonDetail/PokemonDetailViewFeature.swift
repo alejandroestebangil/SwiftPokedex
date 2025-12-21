@@ -1,10 +1,3 @@
-//
-//  PokemonDetailViewFeature.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 9/1/25.
-//
-
 import Foundation
 import ComposableArchitecture
 import Dependencies

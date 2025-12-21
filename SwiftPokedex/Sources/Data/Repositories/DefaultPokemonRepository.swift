@@ -1,10 +1,3 @@
-//
-//  DefaultPokemonRepository.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro1 on 2/12/24.
-//
-
 import CoreData
 import Foundation
 import Dependencies

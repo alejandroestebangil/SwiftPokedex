@@ -1,10 +1,3 @@
-//
-//  PokemonDetailDTO.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 10/12/24.
-//
-
 struct PokemonDetailDTO: Decodable {
     let id: Int
     let name: String
