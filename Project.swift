@@ -7,7 +7,7 @@ let project = Project(
             name: "SwiftPokedex",
             destinations: .iOS,
             product: .app,
-            bundleId: "io.tuist.SwiftPokedex",
+            bundleId: "dev.tuist.SwiftPokedex",
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
@@ -16,9 +16,9 @@ let project = Project(
                     ],
                 ]
             ),
-            sources: ["SwiftPokedex/Sources/**"],
-            resources: [
-                "SwiftPokedex/Resources/**",
+            buildableFolders: [
+                "SwiftPokedex/Sources",
+                "SwiftPokedex/Resources",
             ],
             dependencies: [
                 .sdk(name: "CoreData", type: .framework),
@@ -31,10 +31,11 @@ let project = Project(
             name: "SwiftPokedexTests",
             destinations: .iOS,
             product: .unitTests,
-            bundleId: "io.tuist.SwiftPokedexTests",
+            bundleId: "dev.tuist.SwiftPokedexTests",
             infoPlist: .default,
-            sources: ["SwiftPokedex/Tests/**"],
-            resources: [],
+            buildableFolders: [
+                "SwiftPokedex/Tests"
+            ],
             dependencies: [
                 .target(name: "SwiftPokedex"),
                 .external(name: "Dependencies"),
