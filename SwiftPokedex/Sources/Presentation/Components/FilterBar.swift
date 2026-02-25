@@ -1,36 +1,39 @@
 import SwiftUI
+import ComposableArchitecture
 
 struct FilterBar: View {
-    @ObservedObject var viewModel: PokemonListViewModel
-    
+    let store: StoreOf<PokemonListFeature>
+
     var body: some View {
-        HStack(spacing: 16) {
-            GenerationMenu(viewModel: viewModel)
-            
-            Spacer()
-            
-            SortTypeMenu(viewModel: viewModel)
-            
-            SortOrderButton(viewModel: viewModel)
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            HStack(spacing: 16) {
+                GenerationMenu(viewStore: viewStore)
+
+                Spacer()
+
+                SortTypeMenu(viewStore: viewStore)
+
+                SortOrderButton(viewStore: viewStore)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(Color(.systemGray6))
+            .shadow(radius: 1)
         }
-        .padding(.horizontal)
-        .padding(.vertical, 8)
-        .background(Color(.systemGray6))
-        .shadow(radius: 1)
     }
 }
 
 /// Generation Menu
 private struct GenerationMenu: View {
-    @ObservedObject var viewModel: PokemonListViewModel
-    
+    let viewStore: ViewStoreOf<PokemonListFeature>
+
     var body: some View {
         Menu {
             ForEach(PokemonGeneration.allCases, id: \.self) { generation in
                 Button(action: {
-                    viewModel.updateGeneration(generation)
+                    viewStore.send(.updateGeneration(generation))
                 }) {
-                    if generation == viewModel.selectedGeneration {
+                    if generation == viewStore.selectedGeneration {
                         Label(FilterBar.getGenerationDisplayName(generation), systemImage: "checkmark")
                     } else {
                         Text(FilterBar.getGenerationDisplayName(generation))
@@ -39,7 +42,7 @@ private struct GenerationMenu: View {
                 .frame(width: 60)
             }
         } label: {
-            Label(FilterBar.getGenerationDisplayName(viewModel.selectedGeneration), systemImage: "line.3.horizontal.decrease.circle")
+            Label(FilterBar.getGenerationDisplayName(viewStore.selectedGeneration), systemImage: "line.3.horizontal.decrease.circle")
                 .foregroundColor(.primary)
         }
     }
@@ -47,27 +50,27 @@ private struct GenerationMenu: View {
 
 /// Sort Type Menu
 private struct SortTypeMenu: View {
-    @ObservedObject var viewModel: PokemonListViewModel
-    
+    let viewStore: ViewStoreOf<PokemonListFeature>
+
     var body: some View {
         Menu {
-            Button(action: { viewModel.updateSortType(.id) }) {
-                if viewModel.selectedSortType == .id {
+            Button(action: { viewStore.send(.updateSortType(.id)) }) {
+                if viewStore.selectedSortType == .id {
                     Label(FilterBar.getSortTypeDisplayName(.id), systemImage: "checkmark")
                 } else {
                     Text(FilterBar.getSortTypeDisplayName(.id))
                 }
             }
-            
-            Button(action: { viewModel.updateSortType(.name) }) {
-                if viewModel.selectedSortType == .name {
+
+            Button(action: { viewStore.send(.updateSortType(.name)) }) {
+                if viewStore.selectedSortType == .name {
                     Label(FilterBar.getSortTypeDisplayName(.name), systemImage: "checkmark")
                 } else {
                     Text(FilterBar.getSortTypeDisplayName(.name))
                 }
             }
         } label: {
-            Label(FilterBar.getSortTypeDisplayName(viewModel.selectedSortType), systemImage: "slider.horizontal.3")
+            Label(FilterBar.getSortTypeDisplayName(viewStore.selectedSortType), systemImage: "slider.horizontal.3")
                 .foregroundColor(.primary)
         }
     }
@@ -75,13 +78,13 @@ private struct SortTypeMenu: View {
 
 /// Sort Order Button
 private struct SortOrderButton: View {
-    @ObservedObject var viewModel: PokemonListViewModel
-    
+    let viewStore: ViewStoreOf<PokemonListFeature>
+
     var body: some View {
         Button(action: {
-            viewModel.toggleSortOrder()
+            viewStore.send(.toggleSortOrder)
         }) {
-            Image(systemName: FilterBar.getSortOrderSystemImage(viewModel.selectedSortOrder))
+            Image(systemName: FilterBar.getSortOrderSystemImage(viewStore.selectedSortOrder))
                 .foregroundColor(.primary)
         }
     }
@@ -92,7 +95,7 @@ extension FilterBar {
     static func getGenerationDisplayName(_ generation: PokemonGeneration) -> String {
         generation == .all ? "All Gens" : "Gen \(generation.rawValue)"
     }
-    
+
     static func getSortTypeDisplayName(_ sortType: SortType) -> String {
         switch sortType {
         case .name:
@@ -101,7 +104,7 @@ extension FilterBar {
             return "Number"
         }
     }
-    
+
     static func getSortOrderSystemImage(_ sortOrder: SortOrder) -> String {
         switch sortOrder {
         case .ascending:

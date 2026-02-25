@@ -1,6 +1,6 @@
 import Foundation
 
-enum PokemonGeneration: Int, CaseIterable {
+enum PokemonGeneration: Int, CaseIterable, Equatable, Hashable {
     case all, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9
     
     var range: ClosedRange<Int> {
@@ -19,12 +19,12 @@ enum PokemonGeneration: Int, CaseIterable {
     }
 }
 
-enum SortType {
+enum SortType: Equatable, Hashable {
     case name
     case id
 }
 
-enum SortOrder {
+enum SortOrder: Equatable, Hashable {
     case ascending
     case descending
 }

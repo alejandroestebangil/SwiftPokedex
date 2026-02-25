@@ -2,66 +2,64 @@ import SwiftUI
 import ComposableArchitecture
 
 struct PokemonListView: View {
-    @StateObject var viewModel: PokemonListViewModel
-    
-    init() {
-        _viewModel = StateObject(wrappedValue: PokemonListViewModel())
-    }
-    
+    let store: StoreOf<PokemonListFeature>
+
     var body: some View {
-        NavigationView {
-            ScrollViewReader { proxy in
-                VStack(spacing: 0) {
-                    PokemonHeader {
-                        withAnimation {
-                            proxy.scrollTo("top", anchor: .top)
-                            // Return to top clicking header
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            NavigationStack {
+                ScrollViewReader { proxy in
+                    VStack(spacing: 0) {
+                        PokemonHeader {
+                            withAnimation {
+                                proxy.scrollTo("top", anchor: .top)
+                            }
+                        }
+
+                        FilterBar(store: store)
+
+                        Group {
+                            if viewStore.isLoading {
+                                LoadingView()
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            } else {
+                                pokemonList(viewStore: viewStore)
+                                    .navigationBarTitleDisplayMode(.inline)
+                            }
+                        }
+                        .task { viewStore.send(.onAppear) }
+                        .alert(
+                            "Error",
+                            isPresented: viewStore.binding(
+                                get: { $0.error != nil },
+                                send: .dismissError
+                            )
+                        ) {
+                            Button("OK", role: .cancel) {}
+                        } message: {
+                            Text(viewStore.error ?? "Unknown error")
                         }
                     }
-                    
-                    FilterBar(viewModel: viewModel)
-                    
-                    Group {
-                        if viewModel.isLoading {
-                            LoadingView()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else {
-                            pokemonList()
-                                .navigationBarTitleDisplayMode(.inline)
-                        }
-                    }
-                    .task {
-                        await viewModel.loadPokemonList()
-                    }
-                    .alert("Error", isPresented: .constant(viewModel.error != nil)) {
-                        Button("OK", role: .cancel) {}
-                    } message: {
-                        Text(viewModel.error?.localizedDescription ?? "Unknown error")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .navigationDestination(
+                        store: store.scope(state: \.$destination, action: \.destination)
+                    ) { detailStore in
+                        PokemonDetailView(store: detailStore)
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
     }
-    
-    private func pokemonList() -> some View {
+
+    private func pokemonList(viewStore: ViewStoreOf<PokemonListFeature>) -> some View {
         List {
-            ForEach(viewModel.filteredPokemons) { pokemon in
-                NavigationLink {
-                    PokemonDetailView(
-                        store: Store(
-                            initialState: PokemonDetailViewFeature.State(
-                                pokemonId: pokemon.id
-                            )
-                        ) {
-                            PokemonDetailViewFeature()
-                        }
-                    )
+            ForEach(viewStore.filteredPokemons) { pokemon in
+                Button {
+                    viewStore.send(.pokemonTapped(id: pokemon.id))
                 } label: {
                     PokemonRowView(pokemon: pokemon)
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-                .id(viewModel.filteredPokemons.first?.id == pokemon.id ? "top" : nil)
+                .id(viewStore.filteredPokemons.first?.id == pokemon.id ? "top" : nil)
             }
         }
         .listStyle(PlainListStyle())

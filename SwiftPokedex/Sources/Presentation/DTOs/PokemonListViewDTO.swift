@@ -1,4 +1,4 @@
-struct PokemonListViewDTO: Identifiable {
+struct PokemonListViewDTO: Identifiable, Equatable {
     let id: Int
     let name: String
     let imageUrl: String
