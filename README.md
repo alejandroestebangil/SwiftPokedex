@@ -19,7 +19,7 @@ Native iOS Pokédex application built with Swift, using PokéAPI to display Pok�
 
 ## Architecture & Design Patterns
 - Clean Architecture with clear separation of concerns
-- MVVM + The Composable Architecture (TCA)
+- The Composable Architecture (TCA)
 - Repository Pattern for data management
 - Dependency Injection using Swift Dependencies
 - Protocol-oriented programming
