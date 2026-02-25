@@ -1,10 +1,3 @@
-//
-//  PokemonDetailViewFeatureTests.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 10/1/25.
-//
-
 import XCTest
 import ComposableArchitecture
 @testable import SwiftPokedex

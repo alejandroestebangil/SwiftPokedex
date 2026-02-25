@@ -17,7 +17,7 @@ let package = Package(
     name: "SwiftPokedex",
     dependencies: [
         // Own dependencies
-        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.6.3"),
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.7.3")
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.9.4"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "1.23.2")
     ]
 )

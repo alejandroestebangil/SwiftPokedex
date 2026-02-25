@@ -1,14 +1,6 @@
-//
-//  Pokemon.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro1 on 2/12/24.
-//
-
-
 import Foundation
 
-struct Pokemon: Identifiable, Codable, Equatable {
+struct Pokemon: Identifiable, Codable, Equatable, Sendable {
     let id: Int
     let name: String
     let imageUrl: String

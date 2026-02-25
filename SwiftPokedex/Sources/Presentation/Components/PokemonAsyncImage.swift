@@ -1,10 +1,3 @@
-//
-//  PokemonAsyncImage.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 18/12/24.
-//
-
 import SwiftUI
 
 struct PokemonAsyncImage: View {

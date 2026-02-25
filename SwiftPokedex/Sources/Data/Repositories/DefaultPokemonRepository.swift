@@ -1,15 +1,8 @@
-//
-//  DefaultPokemonRepository.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro1 on 2/12/24.
-//
-
 import CoreData
 import Foundation
 import Dependencies
 
-final class DefaultPokemonRepository: PokemonRepository {
+final class DefaultPokemonRepository: PokemonRepository, @unchecked Sendable {
     @Dependency(\.networkService) private var networkService
     @Dependency(\.persistenceController) private var persistenceController
     

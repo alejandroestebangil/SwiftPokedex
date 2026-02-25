@@ -1,10 +1,3 @@
-//
-//  APIEndpoint.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro1 on 2/12/24.
-//
-
 import Foundation
 
 enum APIEndpoint {

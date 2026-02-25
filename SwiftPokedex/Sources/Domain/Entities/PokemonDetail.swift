@@ -1,14 +1,6 @@
-//
-//  PokemonDetail.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 10/12/24.
-//
-
-
 import Foundation
 
-public struct PokemonDetail: Identifiable {
+public struct PokemonDetail: Identifiable, Sendable {
     public let id: Int
     public let name: String
     public let imageUrl: String
@@ -17,7 +9,7 @@ public struct PokemonDetail: Identifiable {
     public let height: Double
     public let baseStats: [Stat]
     
-    public struct Stat {
+    public struct Stat: Sendable {
         public let name: String
         public let value: Int
         

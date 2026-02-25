@@ -1,10 +1,3 @@
-//
-//  PokemonAudioService.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 16/12/24.
-//
-
 import AVFoundation
 
 protocol PokemonAudioServiceProtocol {

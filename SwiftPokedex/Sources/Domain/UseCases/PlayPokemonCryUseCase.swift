@@ -1,10 +1,3 @@
-//
-//  PlayPokemonCryUseCase.swift
-//  SwiftPokedex
-//
-//  Created by Esteban, Alejandro on 16/12/24.
-//
-
 protocol PlayPokemonCryUseCase {
     func execute(pokemonName: String) async throws
 }
