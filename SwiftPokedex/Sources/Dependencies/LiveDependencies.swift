@@ -33,9 +33,7 @@ struct FetchPokemonListUseCaseClient: DependencyKey {
 }
 
 struct PlayPokemonCryUseCaseClient: DependencyKey {
-    static let liveValue: PlayPokemonCryUseCase = DefaultPlayPokemonCryUseCase(
-        audioService: AudioServiceClient.liveValue
-    )
+    static let liveValue: PlayPokemonCryUseCase = DefaultPlayPokemonCryUseCase()
 }
 
 // MARK: - Dependencies Registration
