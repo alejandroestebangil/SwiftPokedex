@@ -4,7 +4,7 @@ import Foundation
 final class FilterPokemonUseCaseStub: FilterPokemonUseCase {
     var executeToBeReturned: [Pokemon] = []
 
-    func execute(pokemons: [Pokemon], generation: PokemonGeneration, sortType: SortType, sortOrder: SortOrder) -> [Pokemon] {
+    func execute(pokemons: [Pokemon], generation: PokemonGeneration, sortType: SortType, sortOrder: SwiftPokedex.SortOrder) -> [Pokemon] {
         executeToBeReturned
     }
 }
