@@ -4,57 +4,57 @@ import Dependencies
 
 final class PlayPokemonCryUseCaseTests: XCTestCase {
 
-    func testExecute_Success() async throws {
-        /// Given
+    func test_execute_whenSuccess_shouldPlayCry() async throws {
+        // Given
         let pokemonName = "Pikachu"
-        let mockAudioService = MockPokemonAudioService()
-        mockAudioService.playResult = .success(())
+        let audioServiceMock = PokemonAudioServiceMock()
+        audioServiceMock.playPokemonCryToBeReturned = .success(())
 
-        /// When
+        // When
         try await withDependencies {
-            $0.audioService = mockAudioService
+            $0.audioService = audioServiceMock
         } operation: {
             try await DefaultPlayPokemonCryUseCase().execute(pokemonName: pokemonName)
         }
 
-        /// Then
-        XCTAssertEqual(mockAudioService.playedPokemonName, pokemonName)
+        // Then
+        XCTAssertEqual(audioServiceMock.playPokemonCryNamePassed, pokemonName)
     }
 
-    func testExecute_Failure() async {
-        /// Given
+    func test_execute_whenFailure_shouldThrowError() async {
+        // Given
         let pokemonName = "Pikachu"
-        let mockAudioService = MockPokemonAudioService()
-        mockAudioService.playResult = .failure(TestError.someError)
+        let audioServiceMock = PokemonAudioServiceMock()
+        audioServiceMock.playPokemonCryToBeReturned = .failure(TestError.someError)
 
-        /// When/Then
+        // When / Then
         do {
             try await withDependencies {
-                $0.audioService = mockAudioService
+                $0.audioService = audioServiceMock
             } operation: {
                 try await DefaultPlayPokemonCryUseCase().execute(pokemonName: pokemonName)
             }
             XCTFail("Expected error to be thrown")
         } catch {
             XCTAssertTrue(error is TestError)
-            XCTAssertEqual(mockAudioService.playedPokemonName, pokemonName)
+            XCTAssertEqual(audioServiceMock.playPokemonCryNamePassed, pokemonName)
         }
     }
 
-    func testExecute_LowercasePokemonName() async throws {
-        /// Given
+    func test_execute_shouldPassPokemonNameToAudioService() async throws {
+        // Given
         let pokemonName = "PIKACHU"
-        let mockAudioService = MockPokemonAudioService()
-        mockAudioService.playResult = .success(())
+        let audioServiceMock = PokemonAudioServiceMock()
+        audioServiceMock.playPokemonCryToBeReturned = .success(())
 
-        /// When
+        // When
         try await withDependencies {
-            $0.audioService = mockAudioService
+            $0.audioService = audioServiceMock
         } operation: {
             try await DefaultPlayPokemonCryUseCase().execute(pokemonName: pokemonName)
         }
 
-        /// Then
-        XCTAssertEqual(mockAudioService.playedPokemonName, pokemonName)
+        // Then
+        XCTAssertEqual(audioServiceMock.playPokemonCryNamePassed, pokemonName)
     }
 }

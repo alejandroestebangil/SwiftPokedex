@@ -5,24 +5,27 @@ import ComposableArchitecture
 @MainActor
 final class PokemonListFeatureTests: XCTestCase {
 
-    func test_onAppear_success() async {
-        let pokemon = Pokemon(id: 1, name: "bulbasaur", imageUrl: "url")
-        let mockFetchListUseCase = MockFetchPokemonListUseCase()
-        mockFetchListUseCase.result = .success([pokemon])
-        let mockFilterUseCase = MockFilterPokemonUseCase()
-        mockFilterUseCase.filterResult = [pokemon]
+    func test_onAppear_whenFetchSucceeds_shouldLoadPokemonList() async {
+        // Given
+        let pokemon = Pokemon.fixture()
+        let fetchStub = FetchPokemonListUseCaseStub()
+        fetchStub.executeToBeReturned = .success([pokemon])
+        let filterStub = FilterPokemonUseCaseStub()
+        filterStub.executeToBeReturned = [pokemon]
 
         let store = TestStore(initialState: PokemonListFeature.State()) {
             PokemonListFeature()
         } withDependencies: { deps in
-            deps.fetchPokemonListUseCase = mockFetchListUseCase
-            deps.filterPokemonUseCase = mockFilterUseCase
+            deps.fetchPokemonListUseCase = fetchStub
+            deps.filterPokemonUseCase = filterStub
         }
 
+        // When
         await store.send(.onAppear) {
             $0.isLoading = true
         }
 
+        // Then
         await store.receive(.pokemonListResponse(TaskResult<[Pokemon]> { [pokemon] })) {
             $0.isLoading = false
             $0.pokemons = [pokemon]
@@ -30,27 +33,31 @@ final class PokemonListFeatureTests: XCTestCase {
         }
     }
 
-    func test_onAppear_failure() async {
-        let mockFetchListUseCase = MockFetchPokemonListUseCase()
-        mockFetchListUseCase.result = .failure(TestError.someError)
+    func test_onAppear_whenFetchFails_shouldSetError() async {
+        // Given
+        let fetchStub = FetchPokemonListUseCaseStub()
+        fetchStub.executeToBeReturned = .failure(TestError.someError)
 
         let store = TestStore(initialState: PokemonListFeature.State()) {
             PokemonListFeature()
         } withDependencies: { deps in
-            deps.fetchPokemonListUseCase = mockFetchListUseCase
+            deps.fetchPokemonListUseCase = fetchStub
         }
 
+        // When
         await store.send(.onAppear) {
             $0.isLoading = true
         }
 
+        // Then
         await store.receive(.pokemonListResponse(TaskResult<[Pokemon]> { throw TestError.someError })) {
             $0.isLoading = false
             $0.error = TestError.someError.localizedDescription
         }
     }
 
-    func test_onAppear_doesNotFetchWhenAlreadyLoading() async {
+    func test_onAppear_whenAlreadyLoading_shouldNotTriggerFetch() async {
+        // Given
         var state = PokemonListFeature.State()
         state.isLoading = true
 
@@ -58,13 +65,15 @@ final class PokemonListFeatureTests: XCTestCase {
             PokemonListFeature()
         }
 
+        // When / Then
         await store.send(.onAppear)
     }
 
-    func test_updateGeneration() async {
-        let pokemon = Pokemon(id: 1, name: "bulbasaur", imageUrl: "url")
-        let mockFilterUseCase = MockFilterPokemonUseCase()
-        mockFilterUseCase.filterResult = [pokemon]
+    func test_updateGeneration_whenGenerationChanges_shouldFilterPokemons() async {
+        // Given
+        let pokemon = Pokemon.fixture()
+        let filterStub = FilterPokemonUseCaseStub()
+        filterStub.executeToBeReturned = [pokemon]
 
         var state = PokemonListFeature.State()
         state.pokemons = [pokemon]
@@ -72,19 +81,21 @@ final class PokemonListFeatureTests: XCTestCase {
         let store = TestStore(initialState: state) {
             PokemonListFeature()
         } withDependencies: { deps in
-            deps.filterPokemonUseCase = mockFilterUseCase
+            deps.filterPokemonUseCase = filterStub
         }
 
+        // When / Then
         await store.send(.updateGeneration(.gen1)) {
             $0.selectedGeneration = .gen1
             $0.filteredPokemons = [PokemonListViewDTO(pokemon: pokemon)]
         }
     }
 
-    func test_updateSortType() async {
-        let pokemon = Pokemon(id: 1, name: "bulbasaur", imageUrl: "url")
-        let mockFilterUseCase = MockFilterPokemonUseCase()
-        mockFilterUseCase.filterResult = [pokemon]
+    func test_updateSortType_whenSortTypeChanges_shouldFilterPokemons() async {
+        // Given
+        let pokemon = Pokemon.fixture()
+        let filterStub = FilterPokemonUseCaseStub()
+        filterStub.executeToBeReturned = [pokemon]
 
         var state = PokemonListFeature.State()
         state.pokemons = [pokemon]
@@ -92,19 +103,21 @@ final class PokemonListFeatureTests: XCTestCase {
         let store = TestStore(initialState: state) {
             PokemonListFeature()
         } withDependencies: { deps in
-            deps.filterPokemonUseCase = mockFilterUseCase
+            deps.filterPokemonUseCase = filterStub
         }
 
+        // When / Then
         await store.send(.updateSortType(.name)) {
             $0.selectedSortType = .name
             $0.filteredPokemons = [PokemonListViewDTO(pokemon: pokemon)]
         }
     }
 
-    func test_toggleSortOrder() async {
-        let pokemon = Pokemon(id: 1, name: "bulbasaur", imageUrl: "url")
-        let mockFilterUseCase = MockFilterPokemonUseCase()
-        mockFilterUseCase.filterResult = [pokemon]
+    func test_toggleSortOrder_whenToggled_shouldReverseOrder() async {
+        // Given
+        let pokemon = Pokemon.fixture()
+        let filterStub = FilterPokemonUseCaseStub()
+        filterStub.executeToBeReturned = [pokemon]
 
         var state = PokemonListFeature.State()
         state.pokemons = [pokemon]
@@ -112,26 +125,30 @@ final class PokemonListFeatureTests: XCTestCase {
         let store = TestStore(initialState: state) {
             PokemonListFeature()
         } withDependencies: { deps in
-            deps.filterPokemonUseCase = mockFilterUseCase
+            deps.filterPokemonUseCase = filterStub
         }
 
+        // When / Then
         await store.send(.toggleSortOrder) {
             $0.selectedSortOrder = .descending
             $0.filteredPokemons = [PokemonListViewDTO(pokemon: pokemon)]
         }
     }
 
-    func test_pokemonTapped_setsDestination() async {
+    func test_pokemonTapped_shouldSetDestination() async {
+        // Given
         let store = TestStore(initialState: PokemonListFeature.State()) {
             PokemonListFeature()
         }
 
+        // When / Then
         await store.send(.pokemonTapped(id: 25)) {
             $0.destination = PokemonDetailViewFeature.State(pokemonId: 25)
         }
     }
 
-    func test_dismissError() async {
+    func test_dismissError_shouldClearErrorState() async {
+        // Given
         var state = PokemonListFeature.State()
         state.error = "Something went wrong"
 
@@ -139,6 +156,7 @@ final class PokemonListFeatureTests: XCTestCase {
             PokemonListFeature()
         }
 
+        // When / Then
         await store.send(.dismissError) {
             $0.error = nil
         }
