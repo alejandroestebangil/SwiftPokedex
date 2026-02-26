@@ -3,37 +3,36 @@ import Dependencies
 @testable import SwiftPokedex
 
 final class FetchPokemonListUseCaseTests: XCTestCase {
-    func testExecute_Success() async throws {
-        /// Given
-        let pokemon = Pokemon(id: 1, name: "Bulbasaur", imageUrl: "url")
-        let mockRepository = MockPokemonRepository()
-        mockRepository.pokemonListResult = .success([pokemon])
-        
-        /// When
-        let result = try await withDependencies {
-            $0.registerTestDependencies(repository: mockRepository)
-        } operation: {
-            let useCase = DefaultFetchPokemonListUseCase()
-            return try await useCase.execute()
-        }
-        
-        /// Then
-        XCTAssertEqual(result.count, 1)
-        XCTAssertEqual(result.first?.name, "Bulbasaur")
-    }
-    
-    func testExecute_Failure() async {
+
+    func test_execute_whenSuccess_shouldReturnPokemonList() async throws {
         // Given
-        let mockRepository = MockPokemonRepository()
-        mockRepository.pokemonListResult = .failure(TestError.someError)
-        
-        // When/Then
+        let pokemon = Pokemon.fixture()
+        let repositoryStub = PokemonRepositoryStub()
+        repositoryStub.fetchPokemonListToBeReturned = .success([pokemon])
+
+        // When
+        let result = try await withDependencies {
+            $0.registerTestDependencies(repository: repositoryStub)
+        } operation: {
+            try await DefaultFetchPokemonListUseCase().execute()
+        }
+
+        // Then
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(result.first?.name, pokemon.name)
+    }
+
+    func test_execute_whenFailure_shouldThrowError() async {
+        // Given
+        let repositoryStub = PokemonRepositoryStub()
+        repositoryStub.fetchPokemonListToBeReturned = .failure(TestError.someError)
+
+        // When / Then
         do {
             _ = try await withDependencies {
-                $0.registerTestDependencies(repository: mockRepository)
+                $0.registerTestDependencies(repository: repositoryStub)
             } operation: {
-                let useCase = DefaultFetchPokemonListUseCase()
-                return try await useCase.execute()
+                try await DefaultFetchPokemonListUseCase().execute()
             }
             XCTFail("Expected error to be thrown")
         } catch {

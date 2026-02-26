@@ -2,16 +2,15 @@ import Dependencies
 import XCTest
 @testable import SwiftPokedex
 
-// Common test helper
 extension DependencyValues {
     mutating func registerTestDependencies(
-        networkService: NetworkService = MockNetworkService(),
+        networkService: NetworkService = NetworkServiceStub(),
         persistenceController: PersistenceController = PersistenceController(),
-        repository: PokemonRepository = MockPokemonRepository(),
-        fetchListUseCase: FetchPokemonListUseCase = MockFetchPokemonListUseCase(),
-        filterPokemonUseCase: FilterPokemonUseCase = MockFilterPokemonUseCase(),
-        fetchDetailUseCase: FetchPokemonDetailUseCase = MockFetchPokemonDetailUseCase(),
-        audioService: PokemonAudioServiceProtocol = MockPokemonAudioService()
+        repository: PokemonRepository = PokemonRepositoryStub(),
+        fetchListUseCase: FetchPokemonListUseCase = FetchPokemonListUseCaseStub(),
+        filterPokemonUseCase: FilterPokemonUseCase = FilterPokemonUseCaseStub(),
+        fetchDetailUseCase: FetchPokemonDetailUseCase = FetchPokemonDetailUseCaseStub(),
+        audioService: PokemonAudioServiceProtocol = PokemonAudioServiceMock()
     ) {
         self.networkService = networkService
         self.persistenceController = persistenceController

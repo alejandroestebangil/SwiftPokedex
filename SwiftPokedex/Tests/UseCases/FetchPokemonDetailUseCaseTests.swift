@@ -3,46 +3,37 @@ import Dependencies
 @testable import SwiftPokedex
 
 final class FetchPokemonDetailUseCaseTests: XCTestCase {
-    func testExecute_Success() async throws {
-        /// Given
-        let detail = PokemonDetail(
-            id: 1,
-            name: "Bulbasaur",
-            imageUrl: "url",
-            types: ["grass", "poison"],
-            weight: 6.9,
-            height: 0.7,
-            baseStats: [.init(name: "hp", value: 45)]
-        )
-        let mockRepository = MockPokemonRepository()
-        mockRepository.pokemonDetailResult = .success(detail)
-        
-        /// When
+
+    func test_execute_whenSuccess_shouldReturnPokemonDetail() async throws {
+        // Given
+        let pokemon = PokemonDetail.fixture()
+        let repositoryStub = PokemonRepositoryStub()
+        repositoryStub.fetchPokemonDetailToBeReturned = .success(pokemon)
+
+        // When
         let result = try await withDependencies {
-            $0.registerTestDependencies(repository: mockRepository)
+            $0.registerTestDependencies(repository: repositoryStub)
         } operation: {
-            let useCase = DefaultFetchPokemonDetailUseCase()
-            return try await useCase.execute(id: 1)
+            try await DefaultFetchPokemonDetailUseCase().execute(id: 1)
         }
-        
-        /// Then
-        XCTAssertEqual(result.id, detail.id)
-        XCTAssertEqual(result.name, detail.name)
-        XCTAssertEqual(result.types, detail.types)
+
+        // Then
+        XCTAssertEqual(result.id, pokemon.id)
+        XCTAssertEqual(result.name, pokemon.name)
+        XCTAssertEqual(result.types, pokemon.types)
     }
-    
-  func testExecute_Failure() async {
-        /// Given
-        let mockRepository = MockPokemonRepository()
-        mockRepository.pokemonDetailResult = .failure(TestError.someError)
-        
-        /// When/Then
+
+    func test_execute_whenFailure_shouldThrowError() async {
+        // Given
+        let repositoryStub = PokemonRepositoryStub()
+        repositoryStub.fetchPokemonDetailToBeReturned = .failure(TestError.someError)
+
+        // When / Then
         do {
             _ = try await withDependencies {
-                $0.registerTestDependencies(repository: mockRepository)
+                $0.registerTestDependencies(repository: repositoryStub)
             } operation: {
-                let useCase = DefaultFetchPokemonDetailUseCase()
-                return try await useCase.execute(id: 1)
+                try await DefaultFetchPokemonDetailUseCase().execute(id: 1)
             }
             XCTFail("Expected error to be thrown")
         } catch {
