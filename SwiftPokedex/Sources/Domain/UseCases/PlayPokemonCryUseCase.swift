@@ -1,14 +1,12 @@
+import Dependencies
+
 protocol PlayPokemonCryUseCase {
     func execute(pokemonName: String) async throws
 }
 
 final class DefaultPlayPokemonCryUseCase: PlayPokemonCryUseCase {
-    private let audioService: PokemonAudioServiceProtocol
-    
-    init(audioService: PokemonAudioServiceProtocol) {
-        self.audioService = audioService
-    }
-    
+    @Dependency(\.audioService) private var audioService
+
     func execute(pokemonName: String) async throws {
         try await audioService.playPokemonCry(for: pokemonName)
     }
