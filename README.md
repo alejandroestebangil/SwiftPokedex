@@ -62,8 +62,8 @@ mise install
 ```
 3. Install dependencies and generate the Xcode project
 ```bash
-mise exec -- tuist install
-mise exec -- tuist generate
+tuist install
+tuist generate
 ```
 4. Open the generated `SwiftPokedex.xcworkspace` and build/run
 
