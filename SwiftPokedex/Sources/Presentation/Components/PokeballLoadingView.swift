@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Spinning Pokéball used as a loading indicator on the detail screen.
 struct PokeballLoadingView: View {
     @State private var isRotating = false
     

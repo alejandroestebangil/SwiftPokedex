@@ -1,6 +1,9 @@
 import Dependencies
 import Foundation
 
+/// Registers all live implementations with swift-dependencies via `DependencyKey`.
+/// Each key provides a `liveValue` used in production; tests override via `withDependencies`.
+
 // MARK: - Services
 struct NetworkServiceClient: DependencyKey {
     static let liveValue: NetworkService = DefaultNetworkService()

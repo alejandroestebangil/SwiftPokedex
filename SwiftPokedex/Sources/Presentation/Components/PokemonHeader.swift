@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Blue banner at the top of the list with Pokédex logo. Tapping scrolls to top.
 struct PokemonHeader: View {
     let onTap: () -> Void
     

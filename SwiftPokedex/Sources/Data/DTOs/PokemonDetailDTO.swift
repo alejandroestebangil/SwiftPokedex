@@ -1,3 +1,4 @@
+/// Maps the `/pokemon/{id}` response from PokeAPI.
 struct PokemonDetailDTO: Decodable {
     let id: Int
     let name: String
@@ -34,7 +35,7 @@ struct PokemonDetailDTO: Decodable {
         PokemonDetail(
             id: id,
             name: name,
-            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png",
+            imageUrl: SpriteURL.officialArtwork(for: id),
             types: types.map { $0.type.name },
             weight: Double(weight) / 10.0, // In kg
             height: Double(height) / 10.0, // In m

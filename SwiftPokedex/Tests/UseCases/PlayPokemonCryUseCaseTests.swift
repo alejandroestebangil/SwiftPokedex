@@ -40,21 +40,4 @@ final class PlayPokemonCryUseCaseTests: XCTestCase {
             XCTAssertEqual(audioServiceMock.playPokemonCryNamePassed, pokemonName)
         }
     }
-
-    func test_execute_shouldPassPokemonNameToAudioService() async throws {
-        // Given
-        let pokemonName = "PIKACHU"
-        let audioServiceMock = PokemonAudioServiceMock()
-        audioServiceMock.playPokemonCryToBeReturned = .success(())
-
-        // When
-        try await withDependencies {
-            $0.audioService = audioServiceMock
-        } operation: {
-            try await DefaultPlayPokemonCryUseCase().execute(pokemonName: pokemonName)
-        }
-
-        // Then
-        XCTAssertEqual(audioServiceMock.playPokemonCryNamePassed, pokemonName)
-    }
 }

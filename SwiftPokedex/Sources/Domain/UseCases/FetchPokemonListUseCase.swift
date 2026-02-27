@@ -1,6 +1,7 @@
 import Foundation
 import Dependencies
 
+/// Fetches the full Pokémon list from the repository (API-first, CoreData fallback).
 protocol FetchPokemonListUseCase {
     func execute() async throws -> [Pokemon]
 }

@@ -78,6 +78,50 @@ final class PokemonDetailViewFeatureTests: XCTestCase {
         }
     }
 
+    func test_onAppear_whenAlreadyLoaded_shouldNotRefetch() async {
+        // Given
+        let pokemon = PokemonDetail.fixture()
+        var state = PokemonDetailViewFeature.State(pokemonId: 1)
+        state.pokemonDetail = PokemonDetailViewDTO(pokemon: pokemon)
+
+        let store = TestStore(initialState: state) {
+            PokemonDetailViewFeature()
+        }
+
+        // When / Then
+        await store.send(.onAppear)
+    }
+
+    func test_playCry_whenAlreadyPlaying_shouldNotPlayAgain() async {
+        // Given
+        let pokemon = PokemonDetail.fixture()
+        var state = PokemonDetailViewFeature.State(pokemonId: 1)
+        state.pokemonDetail = PokemonDetailViewDTO(pokemon: pokemon)
+        state.isPlayingCry = true
+
+        let store = TestStore(initialState: state) {
+            PokemonDetailViewFeature()
+        }
+
+        // When / Then
+        await store.send(.playCry)
+    }
+
+    func test_dismissError_shouldClearErrorState() async {
+        // Given
+        var state = PokemonDetailViewFeature.State(pokemonId: 1)
+        state.error = "Something went wrong"
+
+        let store = TestStore(initialState: state) {
+            PokemonDetailViewFeature()
+        }
+
+        // When / Then
+        await store.send(.dismissError) {
+            $0.error = nil
+        }
+    }
+
     func test_playCry_whenCryFails_shouldSetError() async {
         // Given
         let pokemon = PokemonDetail.fixture()

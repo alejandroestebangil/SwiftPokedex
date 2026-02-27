@@ -1,5 +1,6 @@
 import Foundation
 
+/// Pokémon generation ranges based on National Pokédex numbers.
 enum PokemonGeneration: Int, CaseIterable, Equatable, Hashable {
     case all, gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9
     

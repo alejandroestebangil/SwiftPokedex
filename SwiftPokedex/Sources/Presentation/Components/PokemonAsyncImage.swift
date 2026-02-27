@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Reusable async image loader with loading spinner and fallback placeholder.
 struct PokemonAsyncImage: View {
     let url: String?
     let size: CGFloat

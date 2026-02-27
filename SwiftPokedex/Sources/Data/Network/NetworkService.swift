@@ -1,5 +1,6 @@
 import Foundation
 
+/// Generic network layer — fetches JSON from an `APIEndpoint` and decodes it.
 protocol NetworkService {
     func fetch<T: Decodable>(from endpoint: APIEndpoint) async throws -> T
 }

@@ -1,6 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 
+/// Horizontal bar with generation picker, sort type menu, and sort order toggle.
 struct FilterBar: View {
     let store: StoreOf<PokemonListFeature>
 

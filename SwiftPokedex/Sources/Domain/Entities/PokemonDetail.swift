@@ -1,5 +1,6 @@
 import Foundation
 
+/// Domain entity for a Pokémon's full detail (stats, types, measurements).
 public struct PokemonDetail: Identifiable, Sendable {
     public let id: Int
     public let name: String

@@ -1,6 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 
+/// Main screen — scrollable list of all Pokémon with filter bar and navigation to detail.
 struct PokemonListView: View {
     let store: StoreOf<PokemonListFeature>
 

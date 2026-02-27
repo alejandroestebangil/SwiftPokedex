@@ -1,6 +1,7 @@
 import Foundation
 @testable import SwiftPokedex
 
+/// Test double — returns a pre-set list regardless of filter/sort params.
 final class FilterPokemonUseCaseStub: FilterPokemonUseCase {
     var executeToBeReturned: [Pokemon] = []
 
