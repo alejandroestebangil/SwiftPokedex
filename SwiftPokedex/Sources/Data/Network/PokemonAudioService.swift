@@ -8,6 +8,8 @@ protocol PokemonAudioServiceProtocol: Sendable {
 actor PokemonAudioService: PokemonAudioServiceProtocol {
     /// Non-nil while audio is playing; acts as a concurrency guard.
     private var delegate: AudioPlayerDelegate?
+    /// Must be retained for the duration of playback or AVAudioPlayer stops immediately.
+    private var audioPlayer: AVAudioPlayer?
 
     func playPokemonCry(for name: String) async throws {
         /// Reject concurrent calls — only one cry can play at a time.
@@ -26,7 +28,7 @@ actor PokemonAudioService: PokemonAudioServiceProtocol {
                 /// Delegate bridges AVAudioPlayerDelegate callbacks into the continuation.
                 /// It guarantees the continuation is resumed exactly once via atomic flag.
                 let playerDelegate = AudioPlayerDelegate { [weak self] result in
-                    Task { await self?.clearDelegate() }
+                    Task { await self?.clearPlayback() }
                     switch result {
                     case .success:
                         continuation.resume()
@@ -36,6 +38,7 @@ actor PokemonAudioService: PokemonAudioServiceProtocol {
                 }
                 let player = try AVAudioPlayer(data: data)
                 player.delegate = playerDelegate
+                self.audioPlayer = player
                 self.delegate = playerDelegate
                 player.play()
             } catch {
@@ -44,8 +47,9 @@ actor PokemonAudioService: PokemonAudioServiceProtocol {
         }
     }
 
-    /// Resets delegate so the next call to `playPokemonCry` is allowed.
-    private func clearDelegate() {
+    /// Resets state so the next call to `playPokemonCry` is allowed.
+    private func clearPlayback() {
+        audioPlayer = nil
         delegate = nil
     }
 }
