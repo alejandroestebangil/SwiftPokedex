@@ -17,7 +17,7 @@ final class DefaultPokemonRepository: PokemonRepository, @unchecked Sendable {
             return pokemons
         } catch {
             /// If API fails, try to fetch from CoreData
-            return try fetchPokemonsFromCoreData()
+            return try await fetchPokemonsFromCoreData()
         }
     }
     
@@ -41,11 +41,13 @@ final class DefaultPokemonRepository: PokemonRepository, @unchecked Sendable {
         }
     }
     
-    private func fetchPokemonsFromCoreData() throws -> [Pokemon] {
-        let request: NSFetchRequest<PokemonEntity> = PokemonEntity.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
-        
-        let entities = try persistenceController.viewContext.fetch(request)
-        return entities.map { $0.toDomain() }
+    private func fetchPokemonsFromCoreData() async throws -> [Pokemon] {
+        try await persistenceController.viewContext.perform {
+            let request: NSFetchRequest<PokemonEntity> = PokemonEntity.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+
+            let entities = try self.persistenceController.viewContext.fetch(request)
+            return entities.map { $0.toDomain() }
+        }
     }
 }

@@ -8,17 +8,11 @@ public struct PokemonDetailViewDTO: Identifiable, Equatable {
     public let baseStats: [StatDTO]
     
     public struct StatDTO: Identifiable, Equatable {
-        public let id: Int
+        public var id: String { name }
         public let name: String
         public let value: Int
-        
-        init(id: Int, name: String, value: Int) {
-            self.id = id // Using an id even though stats are unique
-            self.name = name
-            self.value = value
-        }
     }
-    
+
     init(pokemon: PokemonDetail) {
         self.id = pokemon.id
         self.name = pokemon.name
@@ -26,8 +20,6 @@ public struct PokemonDetailViewDTO: Identifiable, Equatable {
         self.types = pokemon.types
         self.height = pokemon.height
         self.weight = pokemon.weight
-        self.baseStats = pokemon.baseStats.enumerated().map { index, stat in
-            StatDTO(id: index, name: stat.name, value: stat.value)
-        }
+        self.baseStats = pokemon.baseStats.map { StatDTO(name: $0.name, value: $0.value) }
     }
 }

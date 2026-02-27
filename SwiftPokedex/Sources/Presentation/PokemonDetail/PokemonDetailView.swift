@@ -44,7 +44,7 @@ struct PokemonDetailView: View {
                                     .foregroundColor(.white)
                                     .padding(.horizontal, 24)
                                     .padding(.vertical, 8)
-                                    .background(typeColor(for: type))
+                                    .background(PokemonStyles.typeColor(for: type))
                                     .cornerRadius(Constants.statsCornerRadius)
                             }
                         }
@@ -82,10 +82,10 @@ struct PokemonDetailView: View {
                                 .font(.headline)
                                 .padding(.bottom, 8)
                             
-                            ForEach(pokemon.baseStats, id: \.name) { stat in
+                            ForEach(pokemon.baseStats) { stat in
                                 VStack(spacing: 4) {
                                     HStack {
-                                        Text(statName(stat.name))
+                                        Text(PokemonStyles.statName(stat.name))
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
                                         Spacer()
@@ -102,8 +102,8 @@ struct PokemonDetailView: View {
                                                 .cornerRadius(Constants.statsBarRadius)
                                             
                                             Rectangle()
-                                                .fill(statColor(value: stat.value))
-                                                .frame(width: geometry.size.width * CGFloat(stat.value) / 181.0, height: Constants.statsBarHeight)
+                                                .fill(PokemonStyles.statColor(value: stat.value))
+                                                .frame(width: geometry.size.width * CGFloat(stat.value) / Constants.maxBaseStat, height: Constants.statsBarHeight)
                                                 .cornerRadius(Constants.statsBarRadius)
                                         }
                                     }
@@ -132,7 +132,8 @@ struct PokemonDetailView: View {
         }
     }
     
-    private struct Constants {
+    private enum Constants {
+        static let maxBaseStat: CGFloat = 181
         static let imageSize: CGFloat = 200
         static let cryButtonRadius: CGFloat = 10
         static let cryButtonPadding: CGFloat = 8
@@ -145,16 +146,3 @@ struct PokemonDetailView: View {
         static let statsBarRadius: CGFloat = 3
     }
 }
-
-/*
-struct PokemonDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        PokemonDetailView(
-            store: Store(
-                initialState: PokemonDetailViewFeature.State(pokemonId: 1)
-            ) {
-                PokemonDetailViewFeature()
-            }
-        )
-    }
-}*/
