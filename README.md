@@ -17,6 +17,10 @@ Native iOS Pokédex application built with Swift, using PokéAPI to display Pok�
 - Clean, native iOS interface
 - Comprehensive test coverage
 
+<img width="240" height="524" alt="Simulator Screenshot - iPhone 17 Pro - 2026-02-27 at 16 01 49" src="https://github.com/user-attachments/assets/91c5a3ab-4fe5-40d7-9bfb-4b372ddde97c" />
+<img width="240" height="524" alt="Simulator Screenshot - iPhone 17 Pro - 2026-02-27 at 16 02 11" src="https://github.com/user-attachments/assets/04185721-5a27-41c5-9654-e3063e6ab31b" />
+
+
 ## Architecture & Design Patterns
 - Clean Architecture with clear separation of concerns
 - The Composable Architecture (TCA)
@@ -49,18 +53,19 @@ Native iOS Pokédex application built with Swift, using PokéAPI to display Pok�
 1. Clone the repository
 ```bash
 git clone https://github.com/alejandroestebangil/SwiftPokedex.git
+cd SwiftPokedex
 ```
-2. Install Tuist (if not already installed)
+2. Install [mise](https://mise.jdx.dev/) (manages Tuist version)
 ```bash
-curl -Ls https://install.tuist.io | bash
+brew install mise
+mise install
 ```
-3. Generate the Xcode project
+3. Install dependencies and generate the Xcode project
 ```bash
-tuist generate
+mise exec -- tuist install
+mise exec -- tuist generate
 ```
-4. Open the generated `SwiftPokedex.xcodeproj`
-
-5. Build and run
+4. Open the generated `SwiftPokedex.xcworkspace` and build/run
 
 ## Project Structure
 ```
@@ -80,7 +85,7 @@ SwiftPokedex/
 │       ├── Components/
 │       ├── DTOs/
 │       ├── PokemonDetail/
-│       └── PokeomnList/
+│       └── PokemonList/
 └── Tests/
     ├── UseCases/
     └── Mocks/
