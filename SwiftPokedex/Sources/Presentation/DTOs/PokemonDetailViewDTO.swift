@@ -1,3 +1,4 @@
+/// View-layer model for the detail screen. Converts domain `PokemonDetail` for display.
 public struct PokemonDetailViewDTO: Identifiable, Equatable {
     public let id: Int
     public let name: String

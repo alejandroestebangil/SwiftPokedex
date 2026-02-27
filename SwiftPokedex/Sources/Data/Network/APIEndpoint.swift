@@ -1,5 +1,6 @@
 import Foundation
 
+/// PokeAPI v2 endpoints. Each case builds its own URL.
 enum APIEndpoint {
     case pokemonList(limit: Int = 1025)
     case pokemonDetail(id: Int)

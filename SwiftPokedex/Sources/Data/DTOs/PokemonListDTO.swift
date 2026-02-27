@@ -1,5 +1,6 @@
 import Foundation
 
+/// Maps the paginated `/pokemon?limit=N` response from PokeAPI.
 struct PokemonListResponseDTO: Decodable {
     let count: Int
     let results: [PokemonListItemDTO]
@@ -9,8 +10,8 @@ struct PokemonListItemDTO: Decodable {
     let name: String
     let url: String
     
+    /// PokeAPI doesn't include `id` directly — extract it from the resource URL.
     var id: Int {
-        /// Extract ID from the URL since PokeAPI includes it there
         guard let idString = url.split(separator: "/").last else { return 0 }
         return Int(idString) ?? 0
     }
@@ -20,7 +21,7 @@ struct PokemonListItemDTO: Decodable {
         Pokemon(
             id: id,
             name: name,
-            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png"
+            imageUrl: SpriteURL.officialArtwork(for: id)
         )
     }
 }

@@ -1,5 +1,6 @@
 @testable import SwiftPokedex
 
+/// Convenience factory for tests — all fields have sensible defaults.
 extension Pokemon {
     static func fixture(
         id: Int = 1,

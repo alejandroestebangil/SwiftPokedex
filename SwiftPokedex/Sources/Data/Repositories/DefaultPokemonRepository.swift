@@ -2,6 +2,7 @@ import CoreData
 import Foundation
 import Dependencies
 
+/// API-first repository with CoreData offline fallback.
 final class DefaultPokemonRepository: PokemonRepository, @unchecked Sendable {
     @Dependency(\.networkService) private var networkService
     @Dependency(\.persistenceController) private var persistenceController
@@ -29,7 +30,7 @@ final class DefaultPokemonRepository: PokemonRepository, @unchecked Sendable {
     private func savePokemonsToCoreData(_ pokemons: [Pokemon]) async throws {
         try await persistenceController.viewContext.perform {
             /// Clear existing data
-            self.persistenceController.deleteAllPokemons()
+            try self.persistenceController.deleteAllPokemons()
             
             /// Save new data
             for pokemon in pokemons {
@@ -44,7 +45,8 @@ final class DefaultPokemonRepository: PokemonRepository, @unchecked Sendable {
     private func fetchPokemonsFromCoreData() async throws -> [Pokemon] {
         try await persistenceController.viewContext.perform {
             let request: NSFetchRequest<PokemonEntity> = PokemonEntity.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+            /// Type-safe keyPath instead of stringly-typed key for compile-time safety.
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \PokemonEntity.id, ascending: true)]
 
             let entities = try self.persistenceController.viewContext.fetch(request)
             return entities.map { $0.toDomain() }

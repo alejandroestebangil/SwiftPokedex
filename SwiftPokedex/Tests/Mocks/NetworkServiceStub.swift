@@ -1,6 +1,7 @@
 import Foundation
 @testable import SwiftPokedex
 
+/// Test double — returns raw `Data` that gets decoded by the caller.
 final class NetworkServiceStub: NetworkService {
     var fetchToBeReturned: Result<Data, Error> = .success(Data())
 

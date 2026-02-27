@@ -1,6 +1,7 @@
 import Foundation
 import Dependencies
 
+/// Fetches a single Pokémon's detail (stats, types, height/weight) by ID.
 protocol FetchPokemonDetailUseCase {
     func execute(id: Int) async throws -> PokemonDetail
 }

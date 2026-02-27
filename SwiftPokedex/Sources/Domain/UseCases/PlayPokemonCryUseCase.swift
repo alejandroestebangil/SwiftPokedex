@@ -1,5 +1,6 @@
 import Dependencies
 
+/// Plays a Pokémon's cry sound via the audio service.
 protocol PlayPokemonCryUseCase {
     func execute(pokemonName: String) async throws
 }

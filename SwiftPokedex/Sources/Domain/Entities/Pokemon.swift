@@ -1,13 +1,9 @@
 import Foundation
 
-struct Pokemon: Identifiable, Codable, Equatable, Sendable {
+/// Domain entity — no Codable conformance since it's never serialized directly.
+/// Data-layer DTOs handle encoding/decoding; CoreData uses PokemonEntity+Mapping.
+struct Pokemon: Identifiable, Equatable, Sendable {
     let id: Int
     let name: String
     let imageUrl: String
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case imageUrl = "sprite_url"
-    }
 }

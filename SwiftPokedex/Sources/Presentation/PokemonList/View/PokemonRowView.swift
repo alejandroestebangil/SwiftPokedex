@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Single row in the Pokémon list — shows sprite, number (#0001), and name.
 struct PokemonRowView: View {
     let pokemon: PokemonListViewDTO
     

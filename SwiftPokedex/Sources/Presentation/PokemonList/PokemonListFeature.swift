@@ -1,6 +1,8 @@
 import Foundation
 import ComposableArchitecture
 
+/// TCA reducer for the main Pokémon list screen.
+/// Handles fetching, filtering/sorting, and navigation to detail.
 struct PokemonListFeature: Reducer {
 
     @ObservableState
@@ -116,6 +118,7 @@ struct PokemonListFeature: Reducer {
         }
     }
 
+    /// Applies the current generation/sort filters and maps to view DTOs.
     private func filtered(pokemons: [Pokemon], state: State) -> [PokemonListViewDTO] {
         filterPokemonUseCase.execute(
             pokemons: pokemons,

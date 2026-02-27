@@ -1,6 +1,7 @@
 import Foundation
 @testable import SwiftPokedex
 
+/// Test double — returns pre-configured results for list and detail calls.
 final class PokemonRepositoryStub: PokemonRepository {
     var fetchPokemonListToBeReturned: Result<[Pokemon], Error> = .success([])
     var fetchPokemonDetailToBeReturned: Result<PokemonDetail, Error> = .success(.fixture())
@@ -14,7 +15,7 @@ final class PokemonRepositoryStub: PokemonRepository {
     }
 }
 
-// Test Error
+/// Shared test error used across all test files.
 enum TestError: Error {
     case someError
 }

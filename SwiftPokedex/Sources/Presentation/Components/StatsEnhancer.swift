@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Namespace for Pokémon-specific visual helpers (type colors, stat colors, stat display names).
 enum PokemonStyles {
     /// Adds color depending on Pokémon type.
     static func typeColor(for type: String) -> Color {

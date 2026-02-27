@@ -1,15 +1,13 @@
 import Foundation
 
+/// Filters and sorts Pokémon in-memory. Called synchronously from the reducer.
 protocol FilterPokemonUseCase {
     func execute(pokemons: [Pokemon], generation: PokemonGeneration, sortType: SortType, sortOrder: SortOrder) -> [Pokemon]
 }
 
 final class DefaultFilterPokemonUseCase: FilterPokemonUseCase {
     func execute(pokemons: [Pokemon], generation: PokemonGeneration, sortType: SortType, sortOrder: SortOrder) -> [Pokemon] {
-        /// First filter by generation
         let filteredByGeneration = filterByGeneration(pokemons, generation: generation)
-        
-        /// Then sort by name
         return sort(filteredByGeneration, by: sortType, order: sortOrder)
     }
     

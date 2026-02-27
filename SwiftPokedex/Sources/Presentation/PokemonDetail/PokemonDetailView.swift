@@ -1,6 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 
+/// Detail screen — shows sprite (tap to play cry), types, measurements, and stat bars.
 struct PokemonDetailView: View {
     let store: StoreOf<PokemonDetailViewFeature>
     
@@ -123,10 +124,15 @@ struct PokemonDetailView: View {
             .task { @MainActor in
                 viewStore.send(.onAppear)
             }
+            /// Uses a proper TCA binding (not `.constant`) so the alert
+            /// can be dismissed — sends `.dismissError` to clear `state.error`.
             .alert(
                 "Error",
-                isPresented: .constant(viewStore.error != nil),
-                actions: { Button("OK") {} },
+                isPresented: viewStore.binding(
+                    get: { $0.error != nil },
+                    send: .dismissError
+                ),
+                actions: { Button("OK", role: .cancel) {} },
                 message: { Text(viewStore.error ?? "") }
             )
         }
